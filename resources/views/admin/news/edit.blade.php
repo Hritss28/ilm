@@ -58,7 +58,7 @@
                 @if($news->thumbnail)
                 <div class="mb-2">
                     <p class="text-xs text-gray-500 mb-1">Thumbnail saat ini:</p>
-                    <img src="{{ Storage::url($news->thumbnail) }}" alt="Current thumbnail" class="w-48 h-32 object-cover rounded-lg">
+                    <img loading="lazy" src="{{ Storage::url($news->thumbnail) }}" alt="Current thumbnail" class="w-48 h-32 object-cover rounded-lg">
                 </div>
                 @endif
 
@@ -70,7 +70,7 @@
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
                 <div id="thumbnail-preview" class="mt-2 hidden">
-                    <img id="thumbnail-img" src="" alt="Preview" class="w-48 h-32 object-cover rounded-lg">
+                    <img loading="lazy" id="thumbnail-img" src="" alt="Preview" class="w-48 h-32 object-cover rounded-lg">
                 </div>
             </div>
         </div>

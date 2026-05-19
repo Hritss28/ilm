@@ -31,7 +31,7 @@
                 <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Gambar Iklan</label>
                 @if($advertisement->image_url)
                     <div class="mb-2">
-                        <img src="{{ Storage::url($advertisement->image_url) }}" alt="{{ $advertisement->title }}" class="w-40 h-auto rounded border border-gray-200">
+                        <img loading="lazy" src="{{ Storage::url($advertisement->image_url) }}" alt="{{ $advertisement->title }}" class="w-40 h-auto rounded border border-gray-200">
                         <p class="text-xs text-gray-500 mt-1">Gambar saat ini</p>
                     </div>
                 @endif

@@ -61,7 +61,7 @@
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
                 <div id="thumbnail-preview" class="mt-2 hidden">
-                    <img id="thumbnail-img" src="" alt="Preview" class="w-48 h-32 object-cover rounded-lg">
+                    <img loading="lazy" id="thumbnail-img" src="" alt="Preview" class="w-48 h-32 object-cover rounded-lg">
                 </div>
             </div>
         </div>

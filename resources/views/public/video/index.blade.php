@@ -24,7 +24,7 @@
                 <a href="{{ route('video.show', $video->id) }}" class="flex flex-col group cursor-pointer">
                     <div class="relative aspect-video overflow-hidden rounded-sm mb-4 bg-black">
                         @if($video->thumbnail)
-                        <img src="{{ Storage::url($video->thumbnail) }}" alt="{{ $video->title }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" loading="lazy">
+                        <img loading="lazy" src="{{ Storage::url($video->thumbnail) }}" alt="{{ $video->title }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" loading="lazy">
                         @endif
                         <div class="absolute inset-0 flex items-center justify-center">
                             <div class="w-12 h-12 bg-black/40 rounded-full flex items-center justify-center border-2 border-white/60 group-hover:bg-primary group-hover:border-primary transition-all duration-300">

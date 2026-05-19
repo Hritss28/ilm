@@ -165,7 +165,7 @@
             reader.onload = function(e) {
                 div.innerHTML = `
                     <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                        <img src="${e.target.result}" alt="" class="w-full h-full object-cover">
+                        <img loading="lazy" src="${e.target.result}" alt="" class="w-full h-full object-cover">
                     </div>
                     <button type="button" onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                         &times;

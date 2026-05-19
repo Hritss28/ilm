@@ -4,7 +4,7 @@
             {{-- Logo & Description --}}
             <div class="flex flex-col gap-6">
                 <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    <img src="{{ asset('LogoBaruILM.png') }}" alt="Logo" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+                    <img loading="lazy" src="{{ asset('LogoBaruILM.png') }}" alt="Logo" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
                     <div class="flex flex-col -space-y-1">
                         <span class="font-black text-lg leading-none text-[#1a1a1a] tracking-tighter uppercase">INFO LANTAS</span>
                         <span class="font-black text-lg leading-none text-red-600 tracking-tighter uppercase">MOJOKERTO</span>
@@ -53,7 +53,7 @@
                     <a href="{{ route('news.show', $news->slug) }}" class="flex gap-3 group cursor-pointer">
                         <div class="w-16 h-16 bg-gray-100 shrink-0 overflow-hidden">
                             @if($news->thumbnail)
-                                <img src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy">
+                                <img loading="lazy" src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy">
                             @endif
                         </div>
                         <div class="flex flex-col gap-1">

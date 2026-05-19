@@ -24,7 +24,7 @@
                 <a href="{{ route('gallery.show', $gallery->id) }}" class="flex flex-col group cursor-pointer">
                     <div class="aspect-[3/2] overflow-hidden rounded-sm mb-4 bg-gray-100">
                         @if($gallery->images->first())
-                        <img src="{{ Storage::url($gallery->images->first()->image_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <img loading="lazy" src="{{ Storage::url($gallery->images->first()->image_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                         @endif
                     </div>
                     <div class="flex items-center gap-1.5 text-gray-400 text-[10px] font-medium mb-2">

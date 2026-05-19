@@ -16,7 +16,7 @@
                 {{-- Header --}}
                 <div class="bg-red-700 p-10 text-center text-white">
                     <div class="w-24 h-24 bg-white rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg overflow-hidden">
-                        <img src="{{ asset('LogoBaruILM.png') }}" alt="Logo" class="w-full h-full object-contain p-2">
+                        <img loading="lazy" src="{{ asset('LogoBaruILM.png') }}" alt="Logo" class="w-full h-full object-contain p-2">
                     </div>
                     <h1 class="text-3xl font-black uppercase tracking-tight">LOGIN</h1>
                     <p class="text-red-100 text-[10px] mt-1 font-bold uppercase tracking-[0.3em]">Portal Info Lantas Mojokerto</p>

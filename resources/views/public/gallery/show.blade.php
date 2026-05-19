@@ -53,7 +53,7 @@
 
         {{-- Image --}}
         <div class="max-w-5xl max-h-[85vh] flex flex-col items-center">
-            <img :src="currentImage" :alt="currentCaption" class="max-w-full max-h-[75vh] object-contain rounded-lg">
+            <img loading="lazy" :src="currentImage" :alt="currentCaption" class="max-w-full max-h-[75vh] object-contain rounded-lg">
             <p x-show="currentCaption" x-text="currentCaption" class="text-white text-sm mt-3 text-center"></p>
         </div>
 

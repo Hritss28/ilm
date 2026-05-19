@@ -11,7 +11,7 @@
     <div class="flex flex-col gap-6">
         @foreach($sidebarAds->take(2) as $ad)
         <a href="{{ $ad->link_url }}" target="_blank" rel="noopener" class="bg-gray-100 aspect-[4/3] flex items-center justify-center text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] border border-gray-200 relative group cursor-pointer overflow-hidden shadow-sm">
-            <img src="{{ Storage::url($ad->image_url) }}" alt="{{ $ad->title }}" class="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-100 transition-all duration-1000" loading="lazy">
+            <img loading="lazy" src="{{ Storage::url($ad->image_url) }}" alt="{{ $ad->title }}" class="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-100 transition-all duration-1000" loading="lazy">
             <div class="absolute top-2 right-2 bg-black/40 text-[8px] text-white px-1 font-bold">ADVERTISEMENT</div>
         </a>
         @endforeach
@@ -60,7 +60,7 @@
     @if($sidebarAds->count() > 2)
     <div class="sticky top-28 bg-gray-100 border border-gray-200 aspect-[3/4] overflow-hidden relative group cursor-pointer shadow-sm">
         <a href="{{ $sidebarAds[2]->link_url }}" target="_blank" rel="noopener">
-            <img src="{{ Storage::url($sidebarAds[2]->image_url) }}" alt="{{ $sidebarAds[2]->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" loading="lazy">
+            <img loading="lazy" src="{{ Storage::url($sidebarAds[2]->image_url) }}" alt="{{ $sidebarAds[2]->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" loading="lazy">
             <div class="absolute top-2 right-2 bg-black/40 text-[8px] text-white px-1 font-bold">ADVERTISEMENT</div>
         </a>
     </div>

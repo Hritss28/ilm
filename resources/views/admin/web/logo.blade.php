@@ -20,7 +20,7 @@
         <div class="p-8 space-y-8">
             <div class="flex items-center gap-8">
                 <div class="w-32 h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center overflow-hidden">
-                    <img src="{{ asset('LogoBaruILM.png') }}" alt="Logo" class="w-full h-full object-contain p-2">
+                    <img loading="lazy" src="{{ asset('LogoBaruILM.png') }}" alt="Logo" class="w-full h-full object-contain p-2">
                 </div>
                 <div class="flex-1 space-y-4">
                     <h3 class="text-sm font-black text-gray-800 uppercase tracking-widest">Upload Logo Baru</h3>

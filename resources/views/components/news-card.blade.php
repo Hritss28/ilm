@@ -7,7 +7,7 @@
 @if($layout === 'featured')
 <article class="relative rounded-lg overflow-hidden shadow-lg group">
     <a href="{{ route('news.show', $article->slug) }}">
-        <img src="{{ $thumbnailUrl }}" alt="{{ $article->title }}" class="w-full h-72 md:h-96 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+        <img loading="lazy" src="{{ $thumbnailUrl }}" alt="{{ $article->title }}" class="w-full h-72 md:h-96 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
         <div class="absolute bottom-0 left-0 right-0 p-6">
             @if($article->category)
@@ -30,7 +30,7 @@
 @elseif($layout === 'horizontal')
 <article class="flex gap-4 group">
     <a href="{{ route('news.show', $article->slug) }}" class="flex-shrink-0">
-        <img src="{{ $thumbnailUrl }}" alt="{{ $article->title }}" class="w-32 h-24 md:w-40 md:h-28 object-cover rounded-lg group-hover:opacity-90 transition" loading="lazy">
+        <img loading="lazy" src="{{ $thumbnailUrl }}" alt="{{ $article->title }}" class="w-32 h-24 md:w-40 md:h-28 object-cover rounded-lg group-hover:opacity-90 transition" loading="lazy">
     </a>
     <div class="flex flex-col justify-center min-w-0">
         @if($article->category)
@@ -52,7 +52,7 @@
 @else {{-- vertical --}}
 <article class="bg-white rounded-lg shadow-sm overflow-hidden group hover:shadow-md transition">
     <a href="{{ route('news.show', $article->slug) }}">
-        <img src="{{ $thumbnailUrl }}" alt="{{ $article->title }}" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+        <img loading="lazy" src="{{ $thumbnailUrl }}" alt="{{ $article->title }}" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
     </a>
     <div class="p-4">
         @if($article->category)

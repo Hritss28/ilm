@@ -30,7 +30,7 @@
                 @forelse($advertisements as $ad)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <img src="{{ Storage::url($ad->image_url) }}" alt="{{ $ad->title }}" class="w-20 h-14 object-cover rounded border border-gray-200">
+                        <img loading="lazy" src="{{ Storage::url($ad->image_url) }}" alt="{{ $ad->title }}" class="w-20 h-14 object-cover rounded border border-gray-200">
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm font-medium text-gray-900">{{ $ad->title }}</div>

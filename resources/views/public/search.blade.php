@@ -62,7 +62,7 @@
                 <a href="{{ route('news.show', $article->slug) }}" class="flex gap-8 group cursor-pointer border-b border-gray-100 pb-10 last:border-0 block">
                     <div class="w-1/3 aspect-[4/3] overflow-hidden rounded flex-shrink-0">
                         @if($article->thumbnail)
-                        <img src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <img loading="lazy" src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                         @endif
                     </div>
                     <div class="flex-1">

@@ -6,7 +6,7 @@
     <div class="container-custom py-4 flex items-center justify-between gap-4">
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="shrink-0 flex items-center gap-2 md:gap-3">
-            <img src="{{ asset('LogoBaruILM.png') }}" alt="Info Lantas Mojokerto Logo" class="object-contain w-12 h-12 md:w-20 md:h-20" onerror="this.style.display='none'">
+            <img loading="lazy" src="{{ asset('LogoBaruILM.png') }}" alt="Info Lantas Mojokerto Logo" class="object-contain w-12 h-12 md:w-20 md:h-20" onerror="this.style.display='none'">
             <div class="flex flex-col -space-y-1">
                 <span class="font-black text-base md:text-2xl leading-none text-[#1a1a1a] tracking-tighter uppercase whitespace-nowrap">INFO LANTAS</span>
                 <span class="font-black text-base md:text-2xl leading-none text-red-600 tracking-tighter uppercase">MOJOKERTO</span>

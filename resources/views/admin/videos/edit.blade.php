@@ -61,7 +61,7 @@
                 <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-1">Thumbnail</label>
                 @if($video->thumbnail)
                     <div class="mb-2">
-                        <img src="{{ Storage::url($video->thumbnail) }}" alt="Current thumbnail" class="w-48 h-32 object-cover rounded-lg">
+                        <img loading="lazy" src="{{ Storage::url($video->thumbnail) }}" alt="Current thumbnail" class="w-48 h-32 object-cover rounded-lg">
                         <p class="mt-1 text-xs text-gray-500">Thumbnail saat ini. Upload file baru untuk mengganti.</p>
                     </div>
                 @endif
@@ -73,7 +73,7 @@
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
                 <div id="thumbnail-preview" class="mt-2 hidden">
-                    <img id="thumbnail-img" src="" alt="Preview" class="w-48 h-32 object-cover rounded-lg">
+                    <img loading="lazy" id="thumbnail-img" src="" alt="Preview" class="w-48 h-32 object-cover rounded-lg">
                 </div>
             </div>
 

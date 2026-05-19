@@ -18,7 +18,7 @@
         </div>
 
         <div class="w-full aspect-video bg-gray-100 rounded-lg overflow-hidden mb-12 shadow-xl border border-gray-100">
-            <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&q=80&w=1200" alt="Info Lantas Mojokerto Office" class="w-full h-full object-cover" loading="lazy">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&q=80&w=1200" alt="Info Lantas Mojokerto Office" class="w-full h-full object-cover" loading="lazy">
         </div>
     </div>
 

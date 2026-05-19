@@ -32,7 +32,7 @@
             {{-- Thumbnail --}}
             @if($article->thumbnail)
             <div class="mb-6 aspect-video overflow-hidden rounded">
-                <img src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover" loading="lazy">
+                <img loading="lazy" src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover" loading="lazy">
             </div>
             @endif
 
@@ -71,7 +71,7 @@
                     <a href="{{ route('news.show', $related->slug) }}" class="flex gap-4 group cursor-pointer">
                         <div class="w-1/3 shrink-0 aspect-[4/3] overflow-hidden bg-gray-100">
                             @if($related->thumbnail)
-                            <img src="{{ Storage::url($related->thumbnail) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                            <img loading="lazy" src="{{ Storage::url($related->thumbnail) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                             @endif
                         </div>
                         <div class="flex flex-col">

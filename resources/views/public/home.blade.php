@@ -8,7 +8,7 @@
         @if($featuredNews->count() > 0)
         <a href="{{ route('news.show', $featuredNews[0]->slug) }}" class="relative group overflow-hidden bg-navy-900 aspect-video lg:aspect-auto lg:h-[480px]">
             @if($featuredNews[0]->thumbnail)
-            <img src="{{ Storage::url($featuredNews[0]->thumbnail) }}" alt="{{ $featuredNews[0]->title }}" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" loading="lazy">
+            <img loading="lazy" src="{{ Storage::url($featuredNews[0]->thumbnail) }}" alt="{{ $featuredNews[0]->title }}" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" loading="lazy">
             @endif
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10 pointer-events-none">
                 <span class="bg-primary text-white text-[11px] font-bold px-2 py-0.5 w-fit mb-4 uppercase tracking-widest">
@@ -38,7 +38,7 @@
     <div class="flex flex-col gap-6">
         @foreach($topAds->take(2) as $ad)
         <a href="{{ $ad->link_url }}" target="_blank" rel="noopener" class="bg-gray-100 aspect-[4/3] flex items-center justify-center text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] border border-gray-200 relative group cursor-pointer overflow-hidden shadow-sm">
-            <img src="{{ Storage::url($ad->image_url) }}" alt="{{ $ad->title }}" class="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-100 transition-all duration-1000" loading="lazy">
+            <img loading="lazy" src="{{ Storage::url($ad->image_url) }}" alt="{{ $ad->title }}" class="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-100 transition-all duration-1000" loading="lazy">
             <div class="absolute inset-0 flex items-center justify-center bg-black/5">
                 <span class="bg-white/90 text-navy-900 px-4 py-2 shadow-xl border border-navy-900/10 backdrop-blur-sm z-10">IKLAN PREMIUM</span>
             </div>
@@ -59,7 +59,7 @@
 @if($contentAds->count() > 0)
 <div class="container-custom py-2">
     <a href="{{ $contentAds[0]->link_url }}" target="_blank" rel="noopener" class="block w-full bg-gray-100 border border-gray-200 aspect-[8/1] overflow-hidden relative group cursor-pointer shadow-sm">
-        <img src="{{ Storage::url($contentAds[0]->image_url) }}" alt="{{ $contentAds[0]->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" loading="lazy">
+        <img loading="lazy" src="{{ Storage::url($contentAds[0]->image_url) }}" alt="{{ $contentAds[0]->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" loading="lazy">
         <div class="absolute top-1 right-1 bg-black/40 text-[8px] text-white px-1 font-bold">ADVERTISEMENT</div>
     </a>
 </div>
@@ -88,7 +88,7 @@
                         <a href="{{ route('news.show', $mainArticle->slug) }}" class="flex flex-col md:flex-row gap-8 group cursor-pointer">
                             <div class="md:w-[40%] aspect-[4/3] overflow-hidden bg-gray-100 flex-shrink-0">
                                 @if($mainArticle->thumbnail)
-                                <img src="{{ Storage::url($mainArticle->thumbnail) }}" alt="{{ $mainArticle->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+                                <img loading="lazy" src="{{ Storage::url($mainArticle->thumbnail) }}" alt="{{ $mainArticle->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
                                 @endif
                             </div>
                             <div class="md:w-[60%] flex flex-col py-2 pr-4 relative">
@@ -107,7 +107,7 @@
                         <a href="{{ route('news.show', $article->slug) }}" class="flex flex-col group cursor-pointer">
                             <div class="aspect-[4/3] overflow-hidden bg-gray-100 mb-3">
                                 @if($article->thumbnail)
-                                <img src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                                <img loading="lazy" src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                                 @endif
                             </div>
                             <div>
