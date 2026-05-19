@@ -42,8 +42,8 @@
     <div class="bg-white border-t border-gray-100 overflow-x-auto no-scrollbar hidden md:block">
         <div class="container-custom flex items-center gap-6 py-2.5 whitespace-nowrap text-[12px] font-medium text-gray-600">
             <a href="{{ route('about') }}" class="hover:text-primary transition-colors {{ request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Tentang Kami</a>
-            @foreach($categories as $cat)
-                <a href="{{ route('news.category', $cat->slug) }}" class="hover:text-primary transition-colors {{ request()->is('category/'.$cat->slug) ? 'text-primary font-bold' : '' }}">{{ $cat->name }}</a>
+            @foreach($categories->whereNotIn('slug', ['potret', 'potret-kelana-kota', 'lalu-lintas']) as $cat)
+                <a href="{{ route('news.category', $cat->slug) }}" class="hover:text-primary transition-colors {{ request()->is('kategori/'.$cat->slug) ? 'text-primary font-bold' : '' }}">{{ $cat->name }}</a>
             @endforeach
             <a href="{{ route('redaksi') }}" class="hover:text-primary transition-colors {{ request()->routeIs('redaksi') ? 'text-primary font-bold' : '' }}">Redaksi</a>
         </div>
@@ -61,7 +61,7 @@
             </div>
             <div class="flex flex-wrap gap-x-6 gap-y-3">
                 <a href="{{ route('about') }}" @click="mobileOpen = false" class="text-xs font-medium {{ request()->routeIs('about') ? 'text-primary' : 'text-gray-500' }}">Tentang Kami</a>
-                @foreach($categories as $cat)
+                @foreach($categories->whereNotIn('slug', ['potret', 'potret-kelana-kota', 'lalu-lintas']) as $cat)
                     <a href="{{ route('news.category', $cat->slug) }}" @click="mobileOpen = false" class="text-xs font-medium text-gray-500 hover:text-primary">{{ $cat->name }}</a>
                 @endforeach
                 <a href="{{ route('redaksi') }}" @click="mobileOpen = false" class="text-xs font-medium {{ request()->routeIs('redaksi') ? 'text-primary' : 'text-gray-500' }}">Redaksi</a>
