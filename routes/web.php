@@ -58,7 +58,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
     Route::middleware('role:admin')->group(function () {
         Route::resource('categories', Admin\CategoryController::class);
         Route::resource('advertisements', Admin\AdvertisementController::class);
-        Route::resource('users', Admin\UserController::class);
         Route::resource('pages', Admin\StaticPageController::class);
 
         // Modul Web
@@ -85,6 +84,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
     Route::middleware('role:admin,redaktur')->group(function () {
         Route::resource('videos', Admin\VideoController::class);
         Route::resource('galleries', Admin\GalleryController::class);
+        Route::resource('users', Admin\UserController::class);
 
         // Info Lalin Admin
         Route::get('/info-lalin', function () {

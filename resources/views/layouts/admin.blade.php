@@ -67,11 +67,7 @@
                     </div>
                 </div>
 
-                {{-- Modul Redaktur --}}
-                <a href="{{ route('admin.users.index') }}" class="w-full flex items-center gap-3 px-4 py-3 text-[12px] font-bold uppercase tracking-tight transition-all rounded-md mb-1 {{ request()->routeIs('admin.users.*') ? 'bg-red-700 text-white shadow-lg shadow-red-900/40' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <span>Modul Redaktur</span>
-                </a>
+
 
                 {{-- Modul Identitas (Admin only) --}}
                 @if(auth()->user()->isAdmin())
@@ -150,7 +146,7 @@
                 @endif
 
                 {{-- Modul Redaktur (for redaktur role) --}}
-                @if(auth()->user()->isRedaktur())
+                @if(auth()->user()->isAdmin() || auth()->user()->isRedaktur())
                 <a href="{{ route('admin.users.index') }}" class="w-full flex items-center gap-3 px-4 py-3 text-[12px] font-bold uppercase tracking-tight transition-all rounded-md mb-1 {{ request()->routeIs('admin.users.*') ? 'bg-red-700 text-white shadow-lg shadow-red-900/40' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     <span>Modul Redaktur</span>

@@ -37,6 +37,37 @@
             </div>
 
             <div class="mb-4">
+                <label for="telp" class="block text-sm font-medium text-gray-700 mb-1">No. Telp</label>
+                <input type="text" name="telp" id="telp" value="{{ old('telp') }}"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm"
+                    placeholder="081xxx">
+                @error('telp')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="kecamatan" class="block text-sm font-medium text-gray-700 mb-1">Kecamatan</label>
+                <select name="kecamatan" id="kecamatan"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm">
+                    <option value="" disabled selected>Pilih Kecamatan...</option>
+                    <optgroup label="KABUPATEN">
+                        @foreach(['Bangsal', 'Dawarblandong', 'Dlanggu', 'Gedeg', 'Gondang', 'Jatirejo', 'Jetis', 'Kemlagi', 'Kutorejo', 'Mojoanyar', 'Mojosari', 'Ngoro', 'Pacet', 'Pungging', 'Puri', 'Sooko', 'Trawas', 'Trowulan'] as $kec)
+                            <option value="{{ $kec }}" {{ old('kecamatan') === $kec ? 'selected' : '' }}>{{ $kec }}</option>
+                        @endforeach
+                    </optgroup>
+                    <optgroup label="KOTA">
+                        @foreach(['Magersari', 'Kranggan', 'Prajurit Kulon'] as $kec)
+                            <option value="{{ $kec }}" {{ old('kecamatan') === $kec ? 'selected' : '' }}>{{ $kec }}</option>
+                        @endforeach
+                    </optgroup>
+                </select>
+                @error('kecamatan')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
                 <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                 <select name="role" id="role"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm"
