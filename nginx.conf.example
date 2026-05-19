@@ -1,0 +1,51 @@
+# Nginx Configuration Example for Info Lantas Mojokerto
+# Copy relevant sections to your server block
+
+server {
+    listen 80;
+    server_name example.com;
+    root /var/www/laravel-ilm/public;
+
+    index index.php;
+
+    charset utf-8;
+
+    # Gzip Compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml image/svg+xml;
+    gzip_vary on;
+    gzip_min_length 1024;
+
+    # Browser Caching for Static Assets
+    location ~* \.(css|js|woff2|woff|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        access_log off;
+    }
+
+    location ~* \.(jpg|jpeg|png|webp|gif|svg|ico)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000";
+        access_log off;
+    }
+
+    # Laravel routing
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
