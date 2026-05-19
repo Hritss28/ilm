@@ -67,22 +67,39 @@ class NewsController extends Controller
     public function search(Request $request): View
     {
         $query = $request->input('q', '');
-        $articles = collect();
 
+        $newsQuery = News::query()
+            ->published()
+            ->whereDoesntHave('category', fn($q) => $q->where('slug', 'lalu-lintas'))
+            ->with(['category', 'author']);
+
+        // Text search filter
         if (strlen(trim($query)) >= 2) {
-            $articles = News::query()
-                ->published()
-                ->where(function ($q) use ($query) {
-                    $q->where('title', 'LIKE', "%{$query}%")
-                      ->orWhere('content', 'LIKE', "%{$query}%");
-                })
-                ->with(['category', 'author'])
-                ->orderByDesc('published_at')
-                ->paginate(config('news_portal.pagination.news_per_page', 15))
-                ->appends(['q' => $query]);
+            $newsQuery->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('content', 'LIKE', "%{$query}%");
+            });
         }
 
-        $seo = $this->seoService->generateForPage("Pencarian: {$query}", "Hasil pencarian untuk '{$query}'");
+        // Date filter
+        if ($request->filled('year')) {
+            $newsQuery->whereYear('published_at', $request->input('year'));
+        }
+        if ($request->filled('month')) {
+            $newsQuery->whereMonth('published_at', $request->input('month'));
+        }
+        if ($request->filled('day')) {
+            $newsQuery->whereDay('published_at', $request->input('day'));
+        }
+
+        $articles = $newsQuery->orderByDesc('published_at')
+            ->paginate(config('news_portal.pagination.news_per_page', 15))
+            ->appends($request->query());
+
+        $seo = $this->seoService->generateForPage(
+            $query ? "Pencarian: {$query}" : 'Semua Berita',
+            $query ? "Hasil pencarian untuk '{$query}'" : 'Daftar semua berita terbaru'
+        );
 
         return view('public.search', compact('articles', 'query', 'seo'));
     }

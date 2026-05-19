@@ -12,16 +12,48 @@
                 </div>
 
                 <form action="{{ route('news.search') }}" method="GET" class="flex flex-wrap items-center gap-3">
-                    <span class="text-sm font-medium text-gray-500 mr-2">Cari Berita:</span>
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Kata kunci..." class="bg-white border border-gray-200 text-gray-700 text-xs px-3 py-2 rounded outline-none focus:border-primary w-48">
+                    <span class="text-sm font-medium text-gray-500 mr-2">Lihat Berita Tanggal:</span>
+                    <div class="flex items-center gap-2">
+                        <select name="day" class="bg-white border border-gray-200 text-gray-700 text-xs px-3 py-2 rounded outline-none w-16 focus:border-primary">
+                            <option value="">--</option>
+                            @for($i = 1; $i <= 31; $i++)
+                                <option value="{{ $i }}" {{ request('day') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            @endfor
+                        </select>
+                        <select name="month" class="bg-white border border-gray-200 text-gray-700 text-xs px-3 py-2 rounded outline-none w-24 focus:border-primary">
+                            <option value="">--</option>
+                            @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $idx => $bulan)
+                                <option value="{{ $idx + 1 }}" {{ request('month') == ($idx + 1) ? 'selected' : '' }}>{{ $bulan }}</option>
+                            @endforeach
+                        </select>
+                        <select name="year" class="bg-white border border-gray-200 text-gray-700 text-xs px-3 py-2 rounded outline-none w-24 focus:border-primary">
+                            <option value="">--</option>
+                            @for($y = now()->year; $y >= 2020; $y--)
+                                <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <input type="hidden" name="q" value="{{ request('q') }}">
                     <button type="submit" class="bg-red-600 text-white px-8 py-2 rounded-sm text-xs font-bold hover:bg-red-700 transition-colors shadow-sm">
                         CARI
                     </button>
                 </form>
             </div>
 
+            {{-- Search bar --}}
+            <form action="{{ route('news.search') }}" method="GET" class="mb-8">
+                <div class="flex gap-2">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari berita berdasarkan kata kunci..." class="flex-1 bg-white border border-gray-200 text-gray-700 text-sm px-4 py-2.5 rounded outline-none focus:border-primary transition-colors">
+                    <button type="submit" class="bg-red-600 text-white px-6 py-2.5 rounded text-xs font-bold hover:bg-red-700 transition-colors shadow-sm">
+                        CARI
+                    </button>
+                </div>
+            </form>
+
             @if(request('q'))
-            <p class="text-sm text-gray-500 mb-8">Hasil pencarian untuk: <strong class="text-gray-900">"{{ request('q') }}"</strong> ({{ $articles instanceof \Illuminate\Pagination\AbstractPaginator ? $articles->total() : $articles->count() }} hasil)</p>
+            <p class="text-sm text-gray-500 mb-8">Hasil pencarian untuk: <strong class="text-gray-900">"{{ request('q') }}"</strong> ({{ $articles->total() }} hasil)</p>
+            @elseif(request('day') || request('month') || request('year'))
+            <p class="text-sm text-gray-500 mb-8">Berita tanggal: <strong class="text-gray-900">{{ request('day', '--') }}/{{ request('month', '--') }}/{{ request('year', '--') }}</strong> ({{ $articles->total() }} hasil)</p>
             @endif
 
             {{-- News List --}}
@@ -53,9 +85,9 @@
             </div>
 
             {{-- Pagination --}}
-            @if($articles instanceof \Illuminate\Pagination\AbstractPaginator && $articles->hasPages())
+            @if($articles->hasPages())
             <div class="mt-12 flex justify-center">
-                {{ $articles->appends(request()->query())->links() }}
+                {{ $articles->links() }}
             </div>
             @endif
         </div>

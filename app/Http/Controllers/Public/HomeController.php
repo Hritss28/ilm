@@ -27,7 +27,7 @@ class HomeController extends Controller
         $contentAds = $this->cacheService->getActiveAds('content');
 
         // News by category for homepage grid
-        $categorySlugs = ['regional', 'nasional', 'politik', 'ekonomi', 'olahraga', 'lalu-lintas'];
+        $categorySlugs = ['regional', 'nasional', 'politik', 'ekonomi', 'olahraga'];
         $categoryNews = [];
 
         foreach ($categorySlugs as $slug) {
