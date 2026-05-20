@@ -181,15 +181,15 @@
                         Lihat Web
                     </a>
                     <div class="h-4 w-[1px] bg-gray-200"></div>
-                    <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                         <div class="text-right hidden sm:block">
-                            <p class="text-[10px] font-black text-gray-800 uppercase leading-none">{{ auth()->user()->name }}</p>
-                            <p class="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">{{ ucfirst(auth()->user()->role) }}</p>
+                            <p class="text-[12px] font-black text-gray-800 uppercase leading-none">{{ auth()->user()->nickname ?: auth()->user()->name }}</p>
+                            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">{{ auth()->user()->role === 'admin' ? 'ADMIN' : 'REDAKTUR' }}</p>
                         </div>
-                        <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold">
+                        <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </div>
-                    </div>
+                    </a>
                 </div>
             </header>
 

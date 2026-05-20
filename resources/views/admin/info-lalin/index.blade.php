@@ -62,7 +62,7 @@
                 @forelse($infoLalins as $item)
                 <tr class="hover:bg-gray-50/30 transition-colors group">
                     <td class="px-8 py-6">
-                        <span class="text-xs font-bold text-red-600 font-mono tracking-tight uppercase">{{ $item->start_time?->format('H:i') }} &bull; {{ $item->incident_date?->format('d M Y') }}</span>
+                        <span class="text-sm font-medium text-gray-700">{{ $item->incident_date?->format('d/m/Y') }} {{ $item->start_time?->format('H:i') }}</span>
                     </td>
                     <td class="px-8 py-6">
                         <div class="flex flex-col gap-1">

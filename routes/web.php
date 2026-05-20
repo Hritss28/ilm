@@ -54,6 +54,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
     Route::patch('news/{news}/breaking', [Admin\NewsController::class, 'toggleBreakingNews'])->name('news.breaking');
     Route::patch('news/{news}/featured', [Admin\NewsController::class, 'toggleFeatured'])->name('news.featured');
 
+    // Admin Profile
+    Route::get('/profile', [Admin\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [Admin\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
+
     // Admin-only routes
     Route::middleware('role:admin')->group(function () {
         Route::resource('categories', Admin\CategoryController::class);

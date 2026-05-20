@@ -68,14 +68,14 @@ class NewsController extends Controller
     {
         $query = $request->input('q', '');
 
-        $newsQuery = News::query()
+        $baseQuery = News::query()
             ->published()
             ->whereDoesntHave('category', fn($q) => $q->where('slug', 'lalu-lintas'))
             ->with(['category', 'author']);
 
         // Text search filter
         if (strlen(trim($query)) >= 2) {
-            $newsQuery->where(function ($q) use ($query) {
+            $baseQuery->where(function ($q) use ($query) {
                 $q->where('title', 'LIKE', "%{$query}%")
                   ->orWhere('content', 'LIKE', "%{$query}%");
             });
@@ -83,17 +83,27 @@ class NewsController extends Controller
 
         // Date filter
         if ($request->filled('year')) {
-            $newsQuery->whereYear('published_at', $request->input('year'));
+            $baseQuery->whereYear('published_at', $request->input('year'));
         }
         if ($request->filled('month')) {
-            $newsQuery->whereMonth('published_at', $request->input('month'));
+            $baseQuery->whereMonth('published_at', $request->input('month'));
         }
         if ($request->filled('day')) {
-            $newsQuery->whereDay('published_at', $request->input('day'));
+            $baseQuery->whereDay('published_at', $request->input('day'));
+        }
+
+        // Get the featured news (latest one matching the query)
+        $featuredNews = (clone $baseQuery)->orderByDesc('published_at')->first();
+
+        // Paginated news excluding the featured one
+        $newsQuery = (clone $baseQuery);
+        if ($featuredNews) {
+            $newsQuery->where('id', '!=', $featuredNews->id);
         }
 
         $articles = $newsQuery->orderByDesc('published_at')
-            ->paginate(config('news_portal.pagination.news_per_page', 15))
+            ->paginate(5)
+            ->onEachSide(1)
             ->appends($request->query());
 
         $seo = $this->seoService->generateForPage(
@@ -101,7 +111,7 @@ class NewsController extends Controller
             $query ? "Hasil pencarian untuk '{$query}'" : 'Daftar semua berita terbaru'
         );
 
-        return view('public.search', compact('articles', 'query', 'seo'));
+        return view('public.search', compact('articles', 'featuredNews', 'query', 'seo'));
     }
 
     /**

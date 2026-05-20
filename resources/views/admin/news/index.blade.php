@@ -4,7 +4,17 @@
 
 @section('content')
 <div class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-gray-800">Daftar Berita</h1>
+    <h1 class="text-2xl font-bold text-gray-800">
+        @if(request('mine'))
+            Postingan Dimiliki
+        @elseif(request('status') === 'draft')
+            Draft
+        @elseif(request('featured'))
+            Berita Pilihan
+        @else
+            Semua Postingan
+        @endif
+    </h1>
     <a href="{{ route('admin.news.create') }}" class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         Tambah Berita

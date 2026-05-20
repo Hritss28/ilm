@@ -22,7 +22,7 @@ class GalleryController extends Controller
             ->active()
             ->with('images')
             ->orderByDesc('created_at')
-            ->paginate(12);
+            ->paginate(10);
 
         $seo = $this->seoService->generateForPage('Potret', 'Galeri foto berita dan kegiatan');
 
