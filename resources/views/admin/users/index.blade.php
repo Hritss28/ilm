@@ -3,67 +3,60 @@
 @section('title', 'Data Redaktur')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex items-center gap-4 mb-2">
-        <div class="w-8 h-[2px] bg-red-600"></div>
-        <h1 class="text-2xl font-black text-gray-900 uppercase tracking-tight">DATA REDAKTUR</h1>
+<div class="mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div>
+        <div class="flex items-center gap-4 mb-2">
+            <div class="w-8 h-[2px] bg-red-600"></div>
+            <h1 class="text-2xl font-black text-gray-900 uppercase tracking-tight">DATA REDAKTUR</h1>
+        </div>
+        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+            <span>Modul Redaktur</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="text-red-600">DATA PENGGUNA</span>
+        </div>
     </div>
-    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-        <span>Modul Redaktur</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        <span class="text-red-600">DATA PENGGUNA</span>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col md:flex-row md:items-center gap-4">
+            <div class="flex items-center gap-4">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">FILTER KECAMATAN :</label>
+                <select name="kecamatan" onchange="this.form.submit()" class="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-gray-300">
+                    <option value="" {{ request('kecamatan') === null ? 'selected' : '' }}>Semua Kecamatan</option>
+                    <optgroup label="KABUPATEN">
+                        @foreach(['Bangsal', 'Dawarblandong', 'Dlanggu', 'Gedeg', 'Gondang', 'Jatirejo', 'Jetis', 'Kemlagi', 'Kutorejo', 'Mojoanyar', 'Mojosari', 'Ngoro', 'Pacet', 'Pungging', 'Puri', 'Sooko', 'Trawas', 'Trowulan'] as $kec)
+                            <option value="{{ $kec }}" {{ request('kecamatan') === $kec ? 'selected' : '' }}>{{ $kec }}</option>
+                        @endforeach
+                    </optgroup>
+                    <optgroup label="KOTA">
+                        @foreach(['Magersari', 'Kranggan', 'Prajurit Kulon'] as $kec)
+                            <option value="{{ $kec }}" {{ request('kecamatan') === $kec ? 'selected' : '' }}>{{ $kec }}</option>
+                        @endforeach
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">FILTER STATUS :</label>
+                <select name="status" onchange="this.form.submit()" class="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-gray-300">
+                    <option value="" {{ request('status') === null ? 'selected' : '' }}>Semua Status</option>
+                    <option value="aktif" {{ request('status') === 'aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="tidak_aktif" {{ request('status') === 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                </select>
+            </div>
+        </form>
+
+        @if(auth()->user()->isAdmin())
+        <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-[11px] font-black uppercase tracking-widest rounded-md hover:bg-red-700 shadow-sm shadow-red-500/30 transition-all whitespace-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Redaktur
+        </a>
+        @endif
     </div>
 </div>
 
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-    <!-- Top Filters -->
-    <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <form action="{{ route('admin.users.index') }}" method="GET" class="flex items-center gap-4">
-            <!-- Retain search if existing -->
-            @if(request('search'))
-                <input type="hidden" name="search" value="{{ request('search') }}">
-            @endif
-            <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">FILTER KECAMATAN :</label>
-            <select name="kecamatan" onchange="this.form.submit()" class="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-gray-300">
-                <option value="" {{ request('kecamatan') === null ? 'selected' : '' }}>Semua Kecamatan</option>
-                <optgroup label="KABUPATEN">
-                    @foreach(['Bangsal', 'Dawarblandong', 'Dlanggu', 'Gedeg', 'Gondang', 'Jatirejo', 'Jetis', 'Kemlagi', 'Kutorejo', 'Mojoanyar', 'Mojosari', 'Ngoro', 'Pacet', 'Pungging', 'Puri', 'Sooko', 'Trawas', 'Trowulan'] as $kec)
-                        <option value="{{ $kec }}" {{ request('kecamatan') === $kec ? 'selected' : '' }}>{{ $kec }}</option>
-                    @endforeach
-                </optgroup>
-                <optgroup label="KOTA">
-                    @foreach(['Magersari', 'Kranggan', 'Prajurit Kulon'] as $kec)
-                        <option value="{{ $kec }}" {{ request('kecamatan') === $kec ? 'selected' : '' }}>{{ $kec }}</option>
-                    @endforeach
-                </optgroup>
-            </select>
-
-            <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">FILTER STATUS :</label>
-            <select name="status" onchange="this.form.submit()" class="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-gray-300">
-                <option value="" {{ request('status') === null ? 'selected' : '' }}>Semua Status</option>
-                <option value="aktif" {{ request('status') === 'aktif' ? 'selected' : '' }}>Aktif</option>
-                <option value="tidak_aktif" {{ request('status') === 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-            </select>
-        </form>
-
-        <form action="{{ route('admin.users.index') }}" method="GET" class="flex items-center gap-4">
-            <!-- Retain status if existing -->
-            @if(request('status'))
-                <input type="hidden" name="status" value="{{ request('status') }}">
-            @endif
-            @if(request('kecamatan'))
-                <input type="hidden" name="kecamatan" value="{{ request('kecamatan') }}">
-            @endif
-            <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">PENCARIAN :</label>
-            <div class="relative">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari redaktur..." class="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-gray-300 w-48 placeholder-gray-300">
-                <button type="submit" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                </button>
-            </div>
-        </form>
-    </div>
-
     <!-- Users Table -->
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
@@ -166,12 +159,5 @@
     </div>
 </div>
 
-@if(auth()->user()->isAdmin())
-<div class="mt-6 flex justify-end">
-    <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-[11px] font-black uppercase tracking-widest rounded-md hover:bg-red-700 shadow-sm shadow-red-500/30 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Tambah Redaktur
-    </a>
-</div>
-@endif
+
 @endsection

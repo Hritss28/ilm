@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = User::query()->withCount('news');
+        $query = User::query()->where('role', 'redaktur')->withCount('news');
 
         if ($request->filled('status')) {
             $status = $request->status === 'aktif' ? 1 : 0;
@@ -63,21 +63,24 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'telp' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'kecamatan' => 'nullable|string|max:255',
             'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => 'required|in:admin,redaktur,author',
             'is_active' => 'boolean',
         ]);
 
         User::create([
             'name' => $validated['name'],
+            'nickname' => $validated['nickname'] ?? null,
             'email' => $validated['email'],
             'telp' => $validated['telp'] ?? null,
+            'address' => $validated['address'] ?? null,
             'kecamatan' => $validated['kecamatan'] ?? null,
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => 'redaktur',
             'is_active' => $request->boolean('is_active', true),
         ]);
 
@@ -107,20 +110,22 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'telp' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'kecamatan' => 'nullable|string|max:255',
             'password' => ['nullable', 'confirmed', Password::defaults()],
-            'role' => 'required|in:admin,redaktur,author',
             'is_active' => 'boolean',
         ]);
 
         $data = [
             'name' => $validated['name'],
+            'nickname' => $validated['nickname'] ?? null,
             'email' => $validated['email'],
             'telp' => $validated['telp'] ?? null,
+            'address' => $validated['address'] ?? null,
             'kecamatan' => $validated['kecamatan'] ?? null,
-            'role' => $validated['role'],
             'is_active' => $request->boolean('is_active', true),
         ];
 

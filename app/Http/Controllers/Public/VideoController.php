@@ -21,7 +21,7 @@ class VideoController extends Controller
         $videos = Video::query()
             ->active()
             ->orderByDesc('created_at')
-            ->paginate(12);
+            ->paginate(10);
 
         $seo = $this->seoService->generateForPage('Video', 'Kumpulan video berita terkini');
 
