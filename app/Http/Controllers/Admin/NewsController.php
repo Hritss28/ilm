@@ -91,6 +91,11 @@ class NewsController extends Controller
         // Sanitize rich text content
         $data['content'] = $this->contentSanitizer->sanitize($data['content']);
 
+        // Handle lalin category custom input
+        if (isset($data['lalin_category']) && $data['lalin_category'] === 'Lainnya' && $request->filled('lalin_category_custom')) {
+            $data['lalin_category'] = $request->input('lalin_category_custom');
+        }
+
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $this->imageService->uploadThumbnail(
@@ -151,6 +156,11 @@ class NewsController extends Controller
 
         // Sanitize rich text content
         $data['content'] = $this->contentSanitizer->sanitize($data['content']);
+
+        // Handle lalin category custom input
+        if (isset($data['lalin_category']) && $data['lalin_category'] === 'Lainnya' && $request->filled('lalin_category_custom')) {
+            $data['lalin_category'] = $request->input('lalin_category_custom');
+        }
 
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {

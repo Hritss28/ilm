@@ -34,6 +34,15 @@ class StoreNewsRequest extends FormRequest
             'seo_title' => ['nullable', 'string', 'max:255'],
             'seo_description' => ['nullable', 'string'],
             'seo_keywords' => ['nullable', 'string', 'max:500'],
+            'lalin_category' => ['nullable', 'string', 'max:255'],
+            'lalin_status' => ['nullable', 'string', 'max:50'],
+            'lalin_estimated_end' => ['nullable', 'date'],
+            'lalin_alternative_route' => ['nullable', 'string'],
+            'lalin_location' => ['nullable', 'string', 'max:500'],
+            'lalin_source' => ['nullable', 'string', 'max:255'],
+            'lalin_contact' => ['nullable', 'string', 'max:255'],
+            'tanggal_kejadian' => ['nullable', 'date'],
+            'waktu_kejadian' => ['nullable', 'string'],
         ];
     }
 

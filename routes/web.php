@@ -87,19 +87,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
         Route::resource('users', Admin\UserController::class);
 
         // Info Lalin Admin
-        Route::get('/info-lalin', function () {
-            $articles = \App\Models\News::with(['category', 'author'])
-                ->whereHas('category', fn($q) => $q->where('slug', 'lalu-lintas'))
-                ->orderByDesc('created_at')
-                ->paginate(15);
-            return view('admin.info-lalin.index', compact('articles'));
-        })->name('info-lalin.index');
-        Route::get('/info-lalin/create', function () {
-            return view('admin.info-lalin.create');
-        })->name('info-lalin.create');
-        Route::get('/info-lalin/{news}/edit', function (\App\Models\News $news) {
-            return view('admin.info-lalin.edit', compact('news'));
-        })->name('info-lalin.edit');
+        Route::resource('info-lalin', Admin\InfoLalinController::class)->except(['show']);
     });
 });
 

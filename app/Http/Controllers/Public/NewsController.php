@@ -109,32 +109,30 @@ class NewsController extends Controller
      */
     public function infoLalin(): View
     {
-        $today = now()->startOfDay();
-        $yesterday = now()->subDay()->startOfDay();
+        $today = now()->format('Y-m-d');
+        $yesterday = now()->subDay()->format('Y-m-d');
 
         // Get lalu lintas news grouped by date
-        $todayNews = News::query()
+        $todayNews = \App\Models\InfoLalin::query()
             ->published()
-            ->byCategory('lalu-lintas')
-            ->whereDate('published_at', $today)
-            ->with(['category', 'author'])
-            ->orderByDesc('published_at')
+            ->whereDate('incident_date', $today)
+            ->with('author')
+            ->orderByDesc('start_time')
             ->get();
 
-        $yesterdayNews = News::query()
+        $yesterdayNews = \App\Models\InfoLalin::query()
             ->published()
-            ->byCategory('lalu-lintas')
-            ->whereDate('published_at', $yesterday)
-            ->with(['category', 'author'])
-            ->orderByDesc('published_at')
+            ->whereDate('incident_date', $yesterday)
+            ->with('author')
+            ->orderByDesc('start_time')
             ->get();
 
-        $weekNews = News::query()
+        $weekNews = \App\Models\InfoLalin::query()
             ->published()
-            ->byCategory('lalu-lintas')
-            ->where('published_at', '>=', now()->subDays(7))
-            ->with(['category', 'author'])
-            ->orderByDesc('published_at')
+            ->where('incident_date', '>=', now()->subDays(7)->format('Y-m-d'))
+            ->with('author')
+            ->orderByDesc('incident_date')
+            ->orderByDesc('start_time')
             ->get();
 
         $seo = $this->seoService->generateForPage('Info Lalin', 'Informasi lalu lintas terkini wilayah Mojokerto');
