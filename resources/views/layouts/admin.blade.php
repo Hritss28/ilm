@@ -136,11 +136,11 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform" :class="open ? 'rotate-180' : ''"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                     <div x-show="open" x-transition class="ml-6 mt-1 space-y-1 border-l-2 border-gray-800 pl-2">
-                        <a href="{{ route('admin.advertisements.index', ['position' => 'top']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'top' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Paling Atas</a>
-                        <a href="{{ route('admin.advertisements.index', ['position' => 'content']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'content' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Atas</a>
-                        <a href="{{ route('admin.advertisements.index', ['position' => 'sidebar']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'sidebar' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Kanan Tengah</a>
+                        <a href="{{ route('admin.advertisements.index', ['position' => 'top']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'top' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Hero Kanan</a>
+                        <a href="{{ route('admin.advertisements.index', ['position' => 'content']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'content' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Banner Horizontal</a>
+                        <a href="{{ route('admin.advertisements.index', ['position' => 'sidebar']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'sidebar' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Sidebar Kanan</a>
                         <a href="{{ route('admin.advertisements.index') }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request()->routeIs('admin.advertisements.index') && !request('position') ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Semua Iklan</a>
-                        <a href="{{ route('admin.advertisements.index', ['position' => 'footer']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'footer' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Bawah</a>
+                        <a href="{{ route('admin.advertisements.index', ['position' => 'footer']) }}" class="block px-4 py-2 text-[11px] font-bold uppercase tracking-tight {{ request('position') == 'footer' ? 'text-red-500' : 'text-gray-500 hover:text-red-500' }}">• Footer</a>
                     </div>
                 </div>
 

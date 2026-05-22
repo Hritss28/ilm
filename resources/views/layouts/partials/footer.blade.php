@@ -1,3 +1,15 @@
+@php
+    $footerAds = app(\App\Services\CacheService::class)->getActiveAds('footer');
+@endphp
+
+@if($footerAds->count() > 0)
+<div class="container-custom py-6">
+    <a href="{{ $footerAds[0]->link_url }}" target="_blank" rel="noopener" class="block w-full bg-gray-100 border border-gray-200 overflow-hidden relative group cursor-pointer shadow-sm">
+        <img loading="lazy" src="{{ Storage::url($footerAds[0]->image_url) }}" alt="{{ $footerAds[0]->title }}" class="w-full h-auto group-hover:scale-105 transition-transform duration-1000">
+    </a>
+</div>
+@endif
+
 <footer class="bg-white border-t border-gray-200 pt-16">
     <div class="container-custom">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16">

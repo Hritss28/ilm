@@ -63,7 +63,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
     // Admin-only routes
     Route::middleware('role:admin')->group(function () {
         Route::resource('categories', Admin\CategoryController::class);
-        Route::resource('advertisements', Admin\AdvertisementController::class);
+        Route::resource('advertisements', Admin\AdvertisementController::class)->except(['create', 'store', 'destroy']);
         Route::resource('pages', Admin\StaticPageController::class);
 
         // Modul Web

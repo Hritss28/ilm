@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
+use App\Services\CacheService;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ use Illuminate\View\View;
 class AdvertisementController extends Controller
 {
     public function __construct(
-        protected ImageService $imageService
+        protected ImageService $imageService,
+        protected CacheService $cacheService
     ) {}
 
     /**
@@ -68,6 +70,8 @@ class AdvertisementController extends Controller
             'ends_at' => $validated['ends_at'] ?? null,
         ]);
 
+        $this->cacheService->flushAdsCache($validated['position']);
+
         return redirect()->route('admin.advertisements.index')
             ->with('success', 'Iklan berhasil ditambahkan.');
     }
@@ -117,6 +121,8 @@ class AdvertisementController extends Controller
 
         $advertisement->update($data);
 
+        $this->cacheService->flushAdsCache($validated['position']);
+
         return redirect()->route('admin.advertisements.index')
             ->with('success', 'Iklan berhasil diperbarui.');
     }
@@ -131,7 +137,10 @@ class AdvertisementController extends Controller
             $this->imageService->delete($advertisement->image_url);
         }
 
+        $position = $advertisement->position;
         $advertisement->delete();
+
+        $this->cacheService->flushAdsCache($position);
 
         return redirect()->route('admin.advertisements.index')
             ->with('success', 'Iklan berhasil dihapus.');

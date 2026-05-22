@@ -59,10 +59,10 @@
                     <select name="position" id="position"
                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm"
                         required>
-                        <option value="top" {{ old('position', $advertisement->position) === 'top' ? 'selected' : '' }}>Top (Header)</option>
-                        <option value="sidebar" {{ old('position', $advertisement->position) === 'sidebar' ? 'selected' : '' }}>Sidebar</option>
-                        <option value="content" {{ old('position', $advertisement->position) === 'content' ? 'selected' : '' }}>Content (Dalam Artikel)</option>
-                        <option value="footer" {{ old('position', $advertisement->position) === 'footer' ? 'selected' : '' }}>Footer</option>
+                        <option value="top" {{ old('position', $advertisement->position) === 'top' ? 'selected' : '' }}>Hero Kanan (2 slot)</option>
+                        <option value="sidebar" {{ old('position', $advertisement->position) === 'sidebar' ? 'selected' : '' }}>Sidebar Kanan (3 slot)</option>
+                        <option value="content" {{ old('position', $advertisement->position) === 'content' ? 'selected' : '' }}>Banner Horizontal (di bawah hero)</option>
+                        <option value="footer" {{ old('position', $advertisement->position) === 'footer' ? 'selected' : '' }}>Footer (di atas footer)</option>
                     </select>
                     @error('position')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

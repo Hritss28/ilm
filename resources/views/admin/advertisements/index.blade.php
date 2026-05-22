@@ -5,10 +5,21 @@
 @section('content')
 <div class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-bold text-gray-800">Daftar Iklan</h1>
-    <a href="{{ route('admin.advertisements.create') }}" class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Tambah Iklan
-    </a>
+</div>
+
+<div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <div class="flex gap-3">
+        <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div>
+            <h3 class="text-sm font-bold text-blue-800 mb-1">Informasi Penempatan Iklan</h3>
+            <ul class="text-xs text-blue-700 space-y-1 list-disc list-inside">
+                <li><strong>Hero Kanan:</strong> Tampil di sebelah kanan headline utama di halaman depan (Maksimal 2 slot).</li>
+                <li><strong>Banner Horizontal:</strong> Tampil memanjang di bawah headline utama (Maksimal 1 slot).</li>
+                <li><strong>Sidebar Kanan:</strong> Tampil di sidebar kanan semua halaman (Maksimal 3 slot, 1 slot bawah akan lengket/sticky).</li>
+                <li><strong>Footer:</strong> Tampil memanjang di bagian bawah sebelum footer (Maksimal 1 slot).</li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <!-- Advertisements Table -->
@@ -43,7 +54,12 @@
                             @elseif($ad->position === 'content') bg-green-100 text-green-800
                             @else bg-gray-100 text-gray-800
                             @endif">
-                            {{ ucfirst($ad->position) }}
+                            @if($ad->position === 'top') Hero Kanan
+                            @elseif($ad->position === 'sidebar') Sidebar Kanan
+                            @elseif($ad->position === 'content') Banner Horizontal
+                            @elseif($ad->position === 'footer') Footer
+                            @else {{ ucfirst($ad->position) }}
+                            @endif
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -70,20 +86,13 @@
                             <a href="{{ route('admin.advertisements.edit', $ad) }}" class="text-blue-600 hover:text-blue-800" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </a>
-                            <form method="POST" action="{{ route('admin.advertisements.destroy', $ad) }}" class="inline" onsubmit="return confirm('Yakin ingin menghapus iklan ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
-                            </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="px-6 py-12 text-center text-gray-500">
-                        Belum ada iklan. <a href="{{ route('admin.advertisements.create') }}" class="text-red-600 hover:underline">Buat iklan pertama</a>.
+                        Belum ada iklan di database.
                     </td>
                 </tr>
                 @endforelse
