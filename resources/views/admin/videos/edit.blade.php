@@ -43,12 +43,12 @@
                     <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Sumber Video</h2>
 
                     <div class="mb-4">
-                        <label for="video_url" class="block text-sm font-medium text-gray-700 mb-1">URL Video (YouTube/Vimeo) <span class="text-red-500">*</span></label>
+                        <label for="video_url" class="block text-sm font-medium text-gray-700 mb-1">URL Video (YouTube, TikTok, Instagram, dll) <span class="text-red-500">*</span></label>
                         <input type="url" name="video_url" id="video_url" value="{{ old('video_url', $video->video_url) }}" required
-                            placeholder="https://www.youtube.com/watch?v=... atau https://vimeo.com/..."
+                            placeholder="https://www.youtube.com/watch?v=... atau link medsos lain"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
                             oninput="updateVideoPreview(this.value)">
-                        <p class="mt-1 text-xs text-gray-500">Masukkan URL YouTube atau Vimeo yang valid.</p>
+                        <p class="mt-1 text-xs text-gray-500">Masukkan URL Video yang valid. Preview otomatis hanya tersedia untuk YouTube/Vimeo.</p>
                         @error('video_url')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -101,6 +101,10 @@
                         <div class="mb-4">
                             <p class="text-xs text-gray-500 mb-2">Thumbnail saat ini:</p>
                             <img loading="lazy" src="{{ Storage::url($video->thumbnail) }}" alt="Current thumbnail" class="w-full aspect-video object-cover rounded-lg shadow-sm border border-gray-200">
+                            <label class="mt-3 flex items-center cursor-pointer p-2 border border-red-200 bg-red-50 rounded hover:bg-red-100 transition-colors">
+                                <input type="checkbox" name="remove_thumbnail" value="1" class="rounded border-red-300 text-red-600 shadow-sm focus:ring-red-500 w-4 h-4">
+                                <span class="ml-2 text-sm font-medium text-red-700">Hapus gambar ini (Kembali ke Thumbnail Asli Video)</span>
+                            </label>
                         </div>
                     @endif
 

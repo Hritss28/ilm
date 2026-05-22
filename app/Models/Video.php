@@ -54,4 +54,20 @@ class Video extends Model
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Get the display thumbnail URL (uploaded or auto-generated from YouTube).
+     */
+    public function getDisplayThumbnailAttribute(): ?string
+    {
+        if ($this->thumbnail) {
+            return \Illuminate\Support\Facades\Storage::url($this->thumbnail);
+        }
+
+        if ($this->video_url && preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $this->video_url, $matches)) {
+            return "https://img.youtube.com/vi/{$matches[1]}/hqdefault.jpg";
+        }
+
+        return null;
+    }
 }

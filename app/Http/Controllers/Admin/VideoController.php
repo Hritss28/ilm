@@ -46,12 +46,9 @@ class VideoController extends Controller
             'video_url' => [
                 'required',
                 'url',
-                'regex:/^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/|vimeo\.com\/)/i',
             ],
             'thumbnail' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'is_active' => 'boolean',
-        ], [
-            'video_url.regex' => 'URL harus berupa link YouTube atau Vimeo yang valid.',
         ]);
 
         $validated['created_by'] = auth()->id();
@@ -97,12 +94,9 @@ class VideoController extends Controller
             'video_url' => [
                 'required',
                 'url',
-                'regex:/^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/|vimeo\.com\/)/i',
             ],
             'thumbnail' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'is_active' => 'boolean',
-        ], [
-            'video_url.regex' => 'URL harus berupa link YouTube atau Vimeo yang valid.',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -116,6 +110,11 @@ class VideoController extends Controller
                 $request->file('thumbnail'),
                 'videos'
             );
+        } elseif ($request->boolean('remove_thumbnail')) {
+            if ($video->thumbnail) {
+                $this->imageService->delete($video->thumbnail);
+            }
+            $validated['thumbnail'] = null;
         }
 
         $video->update($validated);

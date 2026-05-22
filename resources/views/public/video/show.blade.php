@@ -15,24 +15,21 @@
             </div>
 
             {{-- Video Embed --}}
-            <div class="relative w-full pb-[56.25%] bg-black rounded-sm overflow-hidden mb-6">
-                @php
-                    $embedUrl = '';
-                    $videoUrl = $video->video_url;
-                    if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $videoUrl, $matches)) {
-                        $embedUrl = "https://www.youtube.com/embed/{$matches[1]}";
-                    } elseif (preg_match('/vimeo\.com\/(\d+)/', $videoUrl, $matches)) {
-                        $embedUrl = "https://player.vimeo.com/video/{$matches[1]}";
-                    }
-                @endphp
-
-                @if($embedUrl)
-                    <iframe src="{{ $embedUrl }}" class="absolute inset-0 w-full h-full" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen title="{{ $video->title }}"></iframe>
+            <div class="relative w-full pb-[56.25%] bg-gray-900 rounded-sm overflow-hidden mb-6 group border border-gray-200">
+                @if($video->display_thumbnail)
+                    <a href="{{ $video->video_url }}" target="_blank" class="absolute inset-0 w-full h-full block group cursor-pointer">
+                        <img src="{{ $video->display_thumbnail }}" alt="{{ $video->title }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg">
+                                <svg class="w-10 h-10 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    </a>
                 @else
-                    <div class="absolute inset-0 flex items-center justify-center text-white">
-                        <p>Video tidak dapat ditampilkan. <a href="{{ $videoUrl }}" target="_blank" class="underline">Buka di tab baru</a></p>
+                    <div class="absolute inset-0 flex items-center justify-center text-white flex-col gap-2">
+                        <svg class="w-12 h-12 text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        <p class="text-gray-300">Thumbnail belum tersedia.</p>
+                        <a href="{{ $video->video_url }}" target="_blank" class="mt-2 px-4 py-2 bg-red-600 text-white rounded-full text-sm hover:bg-red-700 transition-colors">Tonton Videonya Langsung</a>
                     </div>
                 @endif
             </div>
@@ -55,8 +52,8 @@
                     @foreach($latestVideos as $latestVideo)
                     <a href="{{ route('video.show', $latestVideo->id) }}" class="flex flex-col group cursor-pointer">
                         <div class="w-full aspect-[4/3] overflow-hidden bg-black mb-3 relative">
-                            @if($latestVideo->thumbnail)
-                            <img loading="lazy" src="{{ Storage::url($latestVideo->thumbnail) }}" alt="{{ $latestVideo->title }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-500">
+                            @if($latestVideo->display_thumbnail)
+                            <img loading="lazy" src="{{ $latestVideo->display_thumbnail }}" alt="{{ $latestVideo->title }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-500">
                             @endif
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-10 h-10 bg-black/40 rounded-full flex items-center justify-center border-2 border-white/60 group-hover:bg-primary group-hover:border-primary transition-all duration-300">

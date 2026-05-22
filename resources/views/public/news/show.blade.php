@@ -38,7 +38,31 @@
 
             {{-- Article Content --}}
             <div class="prose prose-lg max-w-none mb-8">
-                {!! $article->content !!}
+                @php
+                    $content = $article->content;
+                    // Replace YouTube iframes with clickable thumbnails
+                    $content = preg_replace_callback('/<iframe[^>]+src="([^"]+)"[^>]*>.*?<\/iframe>/i', function($matches) {
+                        $url = $matches[1];
+                        $videoId = null;
+                        
+                        if (preg_match('/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([^"&?\/]+)/i', $url, $idMatches)) {
+                            $videoId = $idMatches[1];
+                        }
+                        
+                        if ($videoId) {
+                            return '<a href="https://www.youtube.com/watch?v='.$videoId.'" target="_blank" class="block relative aspect-video group overflow-hidden rounded bg-gray-900 mb-6 border border-gray-200">
+                                <img src="https://img.youtube.com/vi/'.$videoId.'/hqdefault.jpg" alt="YouTube Video" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg">
+                                        <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    </div>
+                                </div>
+                            </a>';
+                        }
+                        return $matches[0];
+                    }, $content);
+                @endphp
+                {!! $content !!}
             </div>
 
             {{-- Social Sharing --}}
