@@ -80,4 +80,12 @@ class NewsPolicy
     {
         return $user->isAdmin() || $user->isRedaktur();
     }
+
+    /**
+     * Determine whether the user can toggle headline status.
+     */
+    public function toggleHeadline(User $user): bool
+    {
+        return $user->isAdmin() || $user->isRedaktur();
+    }
 }

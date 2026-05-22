@@ -53,6 +53,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
     Route::resource('news', Admin\NewsController::class);
     Route::patch('news/{news}/breaking', [Admin\NewsController::class, 'toggleBreakingNews'])->name('news.breaking');
     Route::patch('news/{news}/featured', [Admin\NewsController::class, 'toggleFeatured'])->name('news.featured');
+    Route::patch('news/{news}/headline', [Admin\NewsController::class, 'toggleHeadline'])->name('news.headline');
 
     // Admin Profile
     Route::get('/profile', [Admin\ProfileController::class, 'edit'])->name('profile.edit');
