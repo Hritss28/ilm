@@ -45,10 +45,35 @@
             </div>
             @endif
 
-            {{-- Back Link --}}
-            <div class="mt-6">
-                <a href="{{ route('video.index') }}" class="text-primary hover:underline text-sm font-bold">&larr; Kembali ke Video</a>
-            </div>
+            {{-- Latest Videos --}}
+            @if($latestVideos->isNotEmpty())
+            <section class="border-t border-gray-100 pt-8 mt-8">
+                <div class="border-l-4 border-primary pl-4 mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 uppercase tracking-tighter">Video Terbaru</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    @foreach($latestVideos as $latestVideo)
+                    <a href="{{ route('video.show', $latestVideo->id) }}" class="flex flex-col group cursor-pointer">
+                        <div class="w-full aspect-[4/3] overflow-hidden bg-black mb-3 relative">
+                            @if($latestVideo->thumbnail)
+                            <img loading="lazy" src="{{ Storage::url($latestVideo->thumbnail) }}" alt="{{ $latestVideo->title }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-500">
+                            @endif
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 bg-black/40 rounded-full flex items-center justify-center border-2 border-white/60 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="text-white ml-0.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-gray-400 text-[12px] font-medium mb-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>{{ $latestVideo->created_at->translatedFormat('l, j F Y | H:i') }} WIB</span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug line-clamp-2 text-lg">{{ $latestVideo->title }}</h4>
+                    </a>
+                    @endforeach
+                </div>
+            </section>
+            @endif
         </div>
 
         {{-- Sidebar --}}

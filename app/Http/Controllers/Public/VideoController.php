@@ -21,7 +21,7 @@ class VideoController extends Controller
         $videos = Video::query()
             ->active()
             ->orderByDesc('created_at')
-            ->paginate(12);
+            ->paginate(10);
 
         $seo = $this->seoService->generateForPage('Video', 'Kumpulan video berita terkini');
 
@@ -47,6 +47,13 @@ class VideoController extends Controller
 
         $seo = $this->seoService->generateForPage($video->title, $video->description ?? '');
 
-        return view('public.video.show', compact('video', 'seo'));
+        $latestVideos = Video::query()
+            ->active()
+            ->where('id', '!=', $video->id)
+            ->orderByDesc('created_at')
+            ->limit(4)
+            ->get();
+
+        return view('public.video.show', compact('video', 'seo', 'latestVideos'));
     }
 }

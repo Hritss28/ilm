@@ -22,7 +22,7 @@ class GalleryController extends Controller
             ->active()
             ->with('images')
             ->orderByDesc('created_at')
-            ->paginate(12);
+            ->paginate(10);
 
         $seo = $this->seoService->generateForPage('Potret', 'Galeri foto berita dan kegiatan');
 
@@ -42,6 +42,13 @@ class GalleryController extends Controller
 
         $seo = $this->seoService->generateForPage($gallery->title, $gallery->description ?? '');
 
-        return view('public.gallery.show', compact('gallery', 'seo'));
+        $latestGalleries = Gallery::query()
+            ->active()
+            ->where('id', '!=', $gallery->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('public.gallery.show', compact('gallery', 'seo', 'latestGalleries'));
     }
 }

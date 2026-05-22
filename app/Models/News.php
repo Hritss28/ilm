@@ -37,6 +37,13 @@ class News extends Model
         'seo_description',
         'seo_keywords',
         'firebase_id',
+        'lalin_category',
+        'lalin_status',
+        'lalin_estimated_end',
+        'lalin_alternative_route',
+        'lalin_location',
+        'lalin_source',
+        'lalin_contact',
     ];
 
     /**
@@ -51,6 +58,7 @@ class News extends Model
             'is_breaking_news' => 'boolean',
             'breaking_news_until' => 'datetime',
             'published_at' => 'datetime',
+            'lalin_estimated_end' => 'datetime',
             'views' => 'integer',
         ];
     }

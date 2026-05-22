@@ -20,6 +20,8 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
+        $user = auth()->user();
+
         // Total counts
         $totalNews = News::published()->count();
         $totalUsers = User::where('is_active', true)->count();
@@ -43,7 +45,6 @@ class DashboardController extends Controller
             ->get();
 
         // Daily view stats for last 30 days (for Chart.js)
-        // Group news by published_at date for last 30 days, sum views
         $dailyStats = News::published()
             ->where('published_at', '>=', Carbon::now()->subDays(30))
             ->select(
@@ -66,6 +67,22 @@ class DashboardController extends Controller
             $chartLabels[] = Carbon::parse($date)->format('d M');
             $chartViews[] = isset($statsMap[$date]) ? (int) $statsMap[$date]->total_views : 0;
             $chartArticles[] = isset($statsMap[$date]) ? (int) $statsMap[$date]->total_articles : 0;
+        }
+
+        // Category stats for bar chart
+        $categoryStats = Category::withCount(['news' => function ($q) {
+            $q->published();
+        }])->orderByDesc('news_count')->take(10)->get();
+
+        // Total views
+        $totalViews = News::published()->sum('views');
+
+        // If redaktur role, show redaktur dashboard
+        if ($user->isRedaktur()) {
+            return view('admin.dashboard-redaktur', compact(
+                'totalNews', 'totalViews', 'totalUsers', 'recentNews', 'popularNews',
+                'chartLabels', 'chartViews', 'categoryStats'
+            ));
         }
 
         return view('admin.dashboard', compact(

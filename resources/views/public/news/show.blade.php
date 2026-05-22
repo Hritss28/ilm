@@ -68,17 +68,23 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     @foreach($relatedNews as $related)
-                    <a href="{{ route('news.show', $related->slug) }}" class="flex gap-4 group cursor-pointer">
-                        <div class="w-1/3 shrink-0 aspect-[4/3] overflow-hidden bg-gray-100">
+                    <a href="{{ route('news.show', $related->slug) }}" class="flex flex-col group cursor-pointer">
+                        <div class="w-full aspect-[4/3] overflow-hidden bg-gray-100 mb-3">
                             @if($related->thumbnail)
                             <img loading="lazy" src="{{ Storage::url($related->thumbnail) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                             @endif
                         </div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">{{ $related->category->name ?? '' }}</span>
-                            <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug line-clamp-2 text-sm">{{ $related->title }}</h4>
-                            <div class="text-[10px] text-gray-400 font-medium mt-1">{{ $related->published_at?->translatedFormat('j F Y') }}</div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                            @if($related->category)
+                                <span class="text-[10px] font-bold text-primary uppercase tracking-widest">{{ $related->category->name }}</span>
+                                <span class="text-gray-300">&bull;</span>
+                            @endif
+                            <div class="flex items-center gap-1.5 text-gray-400 text-[12px] font-medium">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <span>{{ $related->published_at?->translatedFormat('l, j F Y | H:i') }} WIB</span>
+                            </div>
                         </div>
+                        <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug line-clamp-2 text-lg">{{ $related->title }}</h4>
                     </a>
                     @endforeach
                 </div>

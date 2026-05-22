@@ -21,10 +21,10 @@
             {{-- Grid Section --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
                 @forelse($galleries as $gallery)
-                <a href="{{ route('gallery.show', $gallery->id) }}" class="flex flex-col group cursor-pointer">
+                <a href="{{ route('gallery.show', $gallery->slug) }}" class="flex flex-col group cursor-pointer">
                     <div class="aspect-[3/2] overflow-hidden rounded-sm mb-4 bg-gray-100">
-                        @if($gallery->images->first())
-                        <img loading="lazy" src="{{ Storage::url($gallery->images->first()->image_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        @if($gallery->cover_image)
+                        <img loading="lazy" src="{{ Storage::url($gallery->cover_image) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         @endif
                     </div>
                     <div class="flex items-center gap-1.5 text-gray-400 text-[10px] font-medium mb-2">

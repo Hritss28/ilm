@@ -22,7 +22,6 @@ class CategorySeeder extends Seeder
             'Regional',
             'Hukum',
             'Politik',
-            'Lalu Lintas',
             'Dikbud',
             'Pariwisata',
             'Tekno',
@@ -31,8 +30,6 @@ class CategorySeeder extends Seeder
             'Olahraga',
             'Info Pelayanan Public',
             'Literasi',
-            'Potret',
-            'Potret Kelana Kota',
         ];
 
         foreach ($categories as $index => $name) {

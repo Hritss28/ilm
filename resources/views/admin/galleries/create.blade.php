@@ -1,91 +1,105 @@
 @extends('layouts.admin')
 
-@section('title', 'Buat Gallery')
+@section('title', 'Tambah Kelana Kota')
 
 @section('content')
-<div class="max-w-4xl">
+<div class="max-w-6xl mx-auto">
     <div class="mb-6">
-        <a href="{{ route('admin.galleries.index') }}" class="text-sm text-gray-600 hover:text-gray-800">&larr; Kembali ke Daftar Gallery</a>
+        <h1 class="text-2xl font-bold text-gray-800">Tambah Kelana Kota</h1>
     </div>
 
     <form method="POST" action="{{ route('admin.galleries.store') }}" enctype="multipart/form-data" id="gallery-form">
         @csrf
 
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Informasi Gallery</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Content Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Basic Info -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Informasi Kelana Kota</h2>
 
-            <!-- Title -->
-            <div class="mb-4">
-                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul <span class="text-red-500">*</span></label>
-                <input type="text" name="title" id="title" value="{{ old('title') }}" required
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                @error('title')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                    <div class="mb-4">
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul <span class="text-red-500">*</span></label>
+                        <input type="text" name="title" id="title" value="{{ old('title') }}" required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-lg">
+                        @error('title')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                        <textarea name="description" id="description" rows="5"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">{{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Image Upload Section -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Upload Gambar <span class="text-red-500">*</span></h2>
+                    <p class="text-sm text-gray-500 mb-4">Maksimal 20 gambar. Format: JPEG, PNG, WebP. Ukuran maks 5MB per gambar.</p>
+
+                    @error('images')
+                        <p class="mb-4 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    @error('images.*')
+                        <p class="mb-4 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+
+                    <!-- Drag and Drop Area -->
+                    <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-400 transition-colors cursor-pointer bg-gray-50"
+                         onclick="document.getElementById('file-input').click()">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <p class="mt-2 text-sm text-gray-600">Drag & drop gambar di sini, atau <span class="text-red-600 font-medium">klik untuk memilih</span></p>
+                        <p class="mt-1 text-xs text-gray-500">Pilih beberapa file sekaligus (maks 20)</p>
+                    </div>
+
+                    <input type="file" id="file-input" name="images[]" multiple accept="image/jpeg,image/png,image/webp" class="hidden" onchange="handleFiles(this.files)">
+
+                    <!-- Image Preview Grid -->
+                    <div id="image-preview-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 hidden">
+                    </div>
+
+                    <p id="image-count" class="mt-2 text-sm text-gray-500 hidden text-right">
+                        <span id="count-number">0</span>/20 gambar dipilih
+                    </p>
+                </div>
             </div>
 
-            <!-- Description -->
-            <div class="mb-4">
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                <textarea name="description" id="description" rows="3"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">{{ old('description') }}</textarea>
-                @error('description')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+            <!-- Sidebar Column -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Publish Action -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Publikasi</h2>
+                    
+                    <div class="mb-6">
+                        <label class="flex items-center cursor-pointer p-3 border rounded-md hover:bg-gray-50 transition-colors">
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" name="is_active" value="1" {{ old('is_active', '1') == '1' ? 'checked' : '' }}
+                                class="rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500 w-5 h-5">
+                            <div class="ml-3">
+                                <span class="block text-sm font-medium text-gray-700">Aktif</span>
+                                <span class="block text-xs text-gray-500">Tampilkan di halaman publik</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <button type="submit" class="w-full py-2.5 px-4 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors flex justify-center items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                            Simpan Kelana Kota
+                        </button>
+                        <a href="{{ route('admin.galleries.index') }}" class="w-full py-2.5 px-4 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors text-center border border-gray-300">
+                            Batal
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <!-- Is Active -->
-            <div class="mb-4">
-                <label class="flex items-center cursor-pointer">
-                    <input type="hidden" name="is_active" value="0">
-                    <input type="checkbox" name="is_active" value="1" {{ old('is_active', '1') == '1' ? 'checked' : '' }}
-                        class="rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500">
-                    <span class="ml-2 text-sm text-gray-700">Aktif (tampilkan di halaman publik)</span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Image Upload Section -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Upload Gambar <span class="text-red-500">*</span></h2>
-            <p class="text-sm text-gray-500 mb-4">Maksimal 20 gambar. Format: JPEG, PNG, WebP. Ukuran maks 5MB per gambar.</p>
-
-            @error('images')
-                <p class="mb-4 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-            @error('images.*')
-                <p class="mb-4 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-
-            <!-- Drag and Drop Area -->
-            <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-400 transition-colors cursor-pointer"
-                 onclick="document.getElementById('file-input').click()">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                </svg>
-                <p class="mt-2 text-sm text-gray-600">Drag & drop gambar di sini, atau <span class="text-red-600 font-medium">klik untuk memilih</span></p>
-                <p class="mt-1 text-xs text-gray-500">Pilih beberapa file sekaligus (maks 20)</p>
-            </div>
-
-            <input type="file" id="file-input" name="images[]" multiple accept="image/jpeg,image/png,image/webp" class="hidden" onchange="handleFiles(this.files)">
-
-            <!-- Image Preview Grid -->
-            <div id="image-preview-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 hidden">
-            </div>
-
-            <p id="image-count" class="mt-2 text-sm text-gray-500 hidden">
-                <span id="count-number">0</span>/20 gambar dipilih
-            </p>
-        </div>
-
-        <!-- Submit -->
-        <div class="flex items-center gap-4">
-            <button type="submit" class="px-6 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
-                Simpan Gallery
-            </button>
-            <a href="{{ route('admin.galleries.index') }}" class="px-6 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300">
-                Batal
-            </a>
         </div>
     </form>
 </div>
