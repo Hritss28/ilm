@@ -11,6 +11,8 @@
             Draft
         @elseif(request('featured'))
             Berita Pilihan
+        @elseif(request('headline'))
+            Berita Headline
         @else
             Semua Postingan
         @endif
@@ -44,6 +46,15 @@
         <div>
             <strong class="text-yellow-900 block mb-1">Mode Pemilihan Berita Pilihan</strong>
             Anda telah memilih <span class="font-bold text-red-600">{{ $featuredCount }}</span> dari maksimal 5 berita. Gunakan tombol aksi di tabel bawah untuk memilih atau menghapus berita dari daftar Berita Pilihan. Berita terpilih akan otomatis tampil di urutan teratas.
+        </div>
+    </div>
+@elseif(request('headline'))
+    @php $headlineCount = \App\Models\News::where('is_headline', true)->count(); @endphp
+    <div class="mb-6 text-sm text-gray-700 bg-indigo-50 border border-indigo-200 rounded-lg p-4 flex items-start gap-3">
+        <svg class="w-5 h-5 text-indigo-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div>
+            <strong class="text-indigo-900 block mb-1">Mode Pemilihan Headline</strong>
+            Anda telah memilih <span class="font-bold text-red-600">{{ $headlineCount }}</span> dari maksimal 3 berita. Gunakan tombol aksi di tabel bawah untuk memilih atau menghapus berita dari daftar Headline. Berita terpilih akan otomatis tampil sebagai Headline.
         </div>
     </div>
 @endif
@@ -134,6 +145,9 @@
                         @if($article->is_breaking_news)
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 ml-1">Breaking</span>
                         @endif
+                        @if($article->is_headline)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 ml-1">Headline</span>
+                        @endif
                         @if($article->is_featured)
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 ml-1">Featured</span>
                         @endif
@@ -166,6 +180,19 @@
                                         <svg class="w-4 h-4" fill="{{ $article->is_featured ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                                         {{ $article->is_featured ? 'Terpilih' : 'Pilih' }}
                                     </button>
+                                </form>
+                                @endcan
+                            @elseif(request('headline'))
+                                @can('toggleHeadline', App\Models\News::class)
+                                <form method="POST" action="{{ route('admin.news.headline', $article) }}" class="inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="headline_order" onchange="this.form.submit()" class="text-xs border-gray-300 rounded-md py-1.5 pl-2 pr-6 {{ $article->is_headline ? 'bg-indigo-50 text-indigo-700 border-indigo-200 font-semibold' : 'bg-gray-50 text-gray-500 border-gray-200' }}">
+                                        <option value="">Bukan Headline</option>
+                                        <option value="1" {{ $article->headline_order == 1 ? 'selected' : '' }}>1. Utama (Besar)</option>
+                                        <option value="2" {{ $article->headline_order == 2 ? 'selected' : '' }}>2. Sub (Atas)</option>
+                                        <option value="3" {{ $article->headline_order == 3 ? 'selected' : '' }}>3. Sub (Bawah)</option>
+                                    </select>
                                 </form>
                                 @endcan
                             @else

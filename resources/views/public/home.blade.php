@@ -5,29 +5,30 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 py-4 container-custom">
     {{-- Left: Main Headline --}}
     <div class="lg:col-span-2 flex flex-col gap-4">
-        @if($featuredNews->count() > 0)
-        <a href="{{ route('news.show', $featuredNews[0]->slug) }}" class="relative group overflow-hidden bg-navy-900 aspect-video lg:aspect-auto lg:h-[480px]">
-            @if($featuredNews[0]->thumbnail)
-            <img loading="lazy" src="{{ Storage::url($featuredNews[0]->thumbnail) }}" alt="{{ $featuredNews[0]->title }}" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" loading="lazy">
+        @if($headlineNews->count() > 0)
+        <a href="{{ route('news.show', $headlineNews[0]->slug) }}" class="relative group overflow-hidden bg-navy-900 aspect-video lg:aspect-auto lg:h-[480px]">
+            @if($headlineNews[0]->thumbnail)
+            <img loading="lazy" src="{{ Storage::url($headlineNews[0]->thumbnail) }}" alt="{{ $headlineNews[0]->title }}" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" loading="lazy">
             @endif
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10 pointer-events-none">
                 <span class="bg-primary text-white text-[11px] font-bold px-2 py-0.5 w-fit mb-4 uppercase tracking-widest">
                     HEADLINE
                 </span>
                 <h1 class="text-white text-2xl md:text-4xl font-bold leading-tight mb-4 group-hover:text-amber-400 transition-colors pointer-events-auto">
-                    {{ $featuredNews[0]->title }}
+                    {{ $headlineNews[0]->title }}
                 </h1>
                 <p class="text-gray-300 text-sm md:text-base line-clamp-2 max-w-2xl font-light">
-                    {{ $featuredNews[0]->excerpt }}
+                    {{ $headlineNews[0]->excerpt }}
                 </p>
             </div>
         </a>
 
         {{-- Sub headlines --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            @foreach($featuredNews->skip(1)->take(2) as $featured)
-            <a href="{{ route('news.show', $featured->slug) }}" class="bg-white p-4 border-l-4 border-primary hover:bg-gray-50 cursor-pointer transition-colors">
-                <h3 class="text-sm font-bold text-gray-900 line-clamp-2">{{ $featured->title }}</h3>
+            @foreach($headlineNews->skip(1)->take(2) as $headline)
+            <a href="{{ route('news.show', $headline->slug) }}" class="bg-white p-4 border-l-4 border-primary hover:bg-gray-50 cursor-pointer transition-colors flex flex-col justify-center">
+                <span class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">HEADLINE</span>
+                <h3 class="text-sm font-bold text-gray-900 line-clamp-2">{{ $headline->title }}</h3>
             </a>
             @endforeach
         </div>

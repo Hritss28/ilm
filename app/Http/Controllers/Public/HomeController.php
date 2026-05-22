@@ -19,6 +19,7 @@ class HomeController extends Controller
      */
     public function index(): View
     {
+        $headlineNews = $this->cacheService->getHeadlineNews();
         $featuredNews = $this->cacheService->getFeaturedNews();
         $breakingNews = $this->cacheService->getBreakingNews();
 
@@ -56,6 +57,7 @@ class HomeController extends Controller
         ];
 
         return view('public.home', compact(
+            'headlineNews',
             'featuredNews',
             'breakingNews',
             'topAds',

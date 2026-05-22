@@ -30,6 +30,8 @@ class News extends Model
         'status',
         'is_featured',
         'is_breaking_news',
+        'is_headline',
+        'headline_order',
         'breaking_news_until',
         'views',
         'published_at',
@@ -56,6 +58,8 @@ class News extends Model
         return [
             'is_featured' => 'boolean',
             'is_breaking_news' => 'boolean',
+            'is_headline' => 'boolean',
+            'headline_order' => 'integer',
             'breaking_news_until' => 'datetime',
             'published_at' => 'datetime',
             'lalin_estimated_end' => 'datetime',
@@ -115,6 +119,14 @@ class News extends Model
                 $q->whereNull('breaking_news_until')
                     ->orWhere('breaking_news_until', '>=', now());
             });
+    }
+
+    /**
+     * Scope a query to only include headline news.
+     */
+    public function scopeHeadline(Builder $query): Builder
+    {
+        return $query->where('is_headline', true);
     }
 
     /**

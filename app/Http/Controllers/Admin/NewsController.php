@@ -42,9 +42,11 @@ class NewsController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Special sorting for breaking news and featured views
+        // Special sorting for breaking news, headline, and featured views
         if ($request->filled('breaking')) {
             $query->orderByDesc('is_breaking_news');
+        } elseif ($request->filled('headline')) {
+            $query->orderByDesc('is_headline');
         } elseif ($request->filled('featured')) {
             $query->orderByDesc('is_featured');
         }
@@ -116,6 +118,7 @@ class NewsController extends Controller
         // Handle boolean fields
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_breaking_news'] = $request->boolean('is_breaking_news');
+        $data['is_headline'] = $request->boolean('is_headline');
 
         // If breaking news, set expiry
         if ($data['is_breaking_news']) {
@@ -181,6 +184,7 @@ class NewsController extends Controller
         // Handle boolean fields
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_breaking_news'] = $request->boolean('is_breaking_news');
+        $data['is_headline'] = $request->boolean('is_headline');
 
         $news->update($data);
 
@@ -257,5 +261,38 @@ class NewsController extends Controller
 
         return redirect()->back()
             ->with('success', 'Status featured berhasil diubah.');
+    }
+
+    /**
+     * Toggle headline status and order.
+     */
+    public function toggleHeadline(Request $request, News $news): RedirectResponse
+    {
+        Gate::authorize('toggleHeadline', News::class);
+
+        $order = $request->input('headline_order');
+
+        if (empty($order)) {
+            $news->update([
+                'is_headline' => false,
+                'headline_order' => null,
+            ]);
+        } else {
+            // Clear the order from any other news
+            News::where('headline_order', $order)->update([
+                'is_headline' => false,
+                'headline_order' => null,
+            ]);
+
+            $news->update([
+                'is_headline' => true,
+                'headline_order' => $order,
+            ]);
+        }
+
+        $this->cacheService->flushNewsCache();
+
+        return redirect()->back()
+            ->with('success', 'Urutan headline berhasil diubah.');
     }
 }

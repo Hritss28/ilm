@@ -43,6 +43,38 @@ class CacheService
     }
 
     /**
+     * Get headline news from cache.
+     * TTL: 5 minutes.
+     */
+    public function getHeadlineNews(): Collection
+    {
+        $ttl = (int) config('news_portal.cache_ttl.headline_news', 5);
+
+        $result = Cache::remember('headline_news', now()->addMinutes($ttl), function () {
+            return News::query()
+                ->published()
+                ->headline()
+                ->with(['category', 'author'])
+                ->orderBy('headline_order', 'asc')
+                ->limit(3)
+                ->get();
+        });
+
+        if (!$result instanceof Collection) {
+            Cache::forget('headline_news');
+            return News::query()
+                ->published()
+                ->headline()
+                ->with(['category', 'author'])
+                ->orderBy('headline_order', 'asc')
+                ->limit(3)
+                ->get();
+        }
+
+        return $result;
+    }
+
+    /**
      * Get featured news from cache.
      * TTL: 10 minutes.
      */
@@ -194,6 +226,7 @@ class CacheService
     public function flushNewsCache(): void
     {
         Cache::forget('breaking_news');
+        Cache::forget('headline_news');
         Cache::forget('featured_news');
         Cache::forget('popular_news');
         Cache::forget('recent_news');
