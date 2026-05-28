@@ -58,24 +58,32 @@
             <div class="lg:col-span-2">
                 <h3 class="text-sm font-bold border-l-4 border-primary pl-4 mb-6 uppercase tracking-widest">BERITA TERPOPULER</h3>
                 @php
-                    $footerPopular = app(\App\Services\CacheService::class)->getPopularNews()->take(2);
+                    $footerPopular = app(\App\Services\CacheService::class)->getPopularAll(5)->take(2);
                 @endphp
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @foreach($footerPopular as $news)
-                    <a href="{{ route('news.show', $news->slug) }}" class="flex gap-3 group cursor-pointer">
+                    @foreach($footerPopular as $item)
+                    <a href="{{ $item->url }}" class="flex gap-3 group cursor-pointer">
                         <div class="w-16 h-16 bg-gray-100 shrink-0 overflow-hidden">
-                            @if($news->thumbnail)
-                                <img loading="lazy" src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy">
+                            @if($item->thumbnail)
+                                <img loading="lazy" src="{{ $item->thumbnail }}" alt="{{ $item->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                             @endif
                         </div>
                         <div class="flex flex-col gap-1">
-                            <h4 class="text-[11px] font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2">{{ $news->title }}</h4>
-                            <span class="text-[10px] text-gray-400">{{ $news->published_at?->translatedFormat('j F Y') }}</span>
+                            @if($item->type === 'video')
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-white bg-red-500 px-1.5 py-0.5 rounded self-start">VIDEO</span>
+                            @elseif($item->type === 'gallery')
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-white bg-emerald-600 px-1.5 py-0.5 rounded self-start">POTRET</span>
+                            @else
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-white bg-primary px-1.5 py-0.5 rounded self-start">{{ $item->label }}</span>
+                            @endif
+                            <h4 class="text-[11px] font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2">{{ $item->title }}</h4>
+                            <span class="text-[10px] text-gray-400">{{ $item->published_at?->translatedFormat('j F Y') }}</span>
                         </div>
                     </a>
                     @endforeach
                 </div>
             </div>
+
         </div>
     </div>
 
