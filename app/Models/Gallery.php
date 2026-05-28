@@ -25,6 +25,7 @@ class Gallery extends Model
         'description',
         'cover_image',
         'is_active',
+        'views',
         'created_by',
     ];
 
@@ -37,6 +38,7 @@ class Gallery extends Model
     {
         return [
             'is_active' => 'boolean',
+            'views'     => 'integer',
         ];
     }
 

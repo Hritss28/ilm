@@ -31,6 +31,7 @@ class GalleryController extends Controller
 
     /**
      * Display a single gallery with all its images.
+     * Increments view counter (session-based).
      */
     public function show(string $slug): View
     {
@@ -39,6 +40,13 @@ class GalleryController extends Controller
             ->where('slug', $slug)
             ->with(['images', 'creator'])
             ->firstOrFail();
+
+        // Session-based view increment
+        $sessionKey = "viewed_gallery_{$gallery->id}";
+        if (!session()->has($sessionKey)) {
+            $gallery->increment('views');
+            session()->put($sessionKey, true);
+        }
 
         $seo = $this->seoService->generateForPage($gallery->title, $gallery->description ?? '');
 

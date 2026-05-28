@@ -31,6 +31,9 @@ Route::get('/redaksi', [Public\StaticPageController::class, 'redaksi'])->name('r
 // Info Lalin
 Route::get('/infolalin', [Public\NewsController::class, 'infoLalin'])->name('infolalin');
 
+// Weather API (public, cached)
+Route::get('/api/weather', [Public\WeatherController::class, 'index'])->name('api.weather');
+
 // Sitemap
 Route::get('/sitemap.xml', [Public\SitemapController::class, 'index'])->name('sitemap');
 

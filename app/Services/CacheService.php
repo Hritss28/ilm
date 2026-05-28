@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\News;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class CacheService
 {
@@ -221,6 +222,95 @@ class CacheService
     }
 
     /**
+     * Get popular content from all sources (News + Video + Gallery) sorted by views.
+     * Returns a unified collection with: type, title, url, views, thumbnail.
+     * TTL: 30 minutes.
+     */
+    public function getPopularAll(int $limit = 10): \Illuminate\Support\Collection
+    {
+        $ttl = (int) config('news_portal.cache_ttl.popular_news', 30);
+        $cacheKey = "popular_all_{$limit}";
+
+        $result = Cache::remember($cacheKey, now()->addMinutes($ttl), function () use ($limit) {
+            return $this->buildPopularAll($limit);
+        });
+
+        if (!$result instanceof \Illuminate\Support\Collection) {
+            Cache::forget($cacheKey);
+            return $this->buildPopularAll($limit);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Build the unified popular content collection (News + Video + Gallery).
+     */
+    private function buildPopularAll(int $limit): \Illuminate\Support\Collection
+    {
+        // Top news (published, non-lalin)
+        $news = News::query()
+            ->published()
+            ->whereNull('lalin_category')
+            ->with(['category'])
+            ->orderByDesc('views')
+            ->limit($limit)
+            ->get()
+            ->map(function ($item) {
+                return (object) [
+                    'type'         => 'news',
+                    'title'        => $item->title,
+                    'url'          => route('news.show', $item->slug),
+                    'views'        => $item->views ?? 0,
+                    'thumbnail'    => $item->thumbnail ? \Illuminate\Support\Facades\Storage::url($item->thumbnail) : null,
+                    'published_at' => $item->published_at,
+                    'label'        => $item->category?->name ?? 'Berita',
+                ];
+            });
+
+        // Top videos (active)
+        $videos = \App\Models\Video::query()
+            ->active()
+            ->orderByDesc('views')
+            ->limit($limit)
+            ->get()
+            ->map(function ($item) {
+                return (object) [
+                    'type'         => 'video',
+                    'title'        => $item->title,
+                    'url'          => route('video.show', $item->id),
+                    'views'        => $item->views ?? 0,
+                    'thumbnail'    => $item->display_thumbnail,
+                    'published_at' => $item->created_at,
+                    'label'        => 'Video',
+                ];
+            });
+
+        // Top galleries (active) — Potret Kelana Kota
+        $galleries = \App\Models\Gallery::query()
+            ->active()
+            ->orderByDesc('views')
+            ->limit($limit)
+            ->get()
+            ->map(function ($item) {
+                return (object) [
+                    'type'         => 'gallery',
+                    'title'        => $item->title,
+                    'url'          => route('gallery.show', $item->slug),
+                    'views'        => $item->views ?? 0,
+                    'thumbnail'    => $item->cover_image ? \Illuminate\Support\Facades\Storage::url($item->cover_image) : null,
+                    'published_at' => $item->created_at,
+                    'label'        => 'Potret',
+                ];
+            });
+
+        return $news->concat($videos)->concat($galleries)
+            ->sortByDesc('views')
+            ->values()
+            ->take($limit);
+    }
+
+    /**
      * Flush all news-related caches.
      */
     public function flushNewsCache(): void
@@ -230,6 +320,8 @@ class CacheService
         Cache::forget('featured_news');
         Cache::forget('popular_news');
         Cache::forget('recent_news');
+        Cache::forget('popular_all_5');
+        Cache::forget('popular_all_10');
     }
 
     /**
@@ -255,5 +347,82 @@ class CacheService
     public function flushCategoriesCache(): void
     {
         Cache::forget('categories_menu');
+    }
+
+    /**
+     * Get weather data from Open-Meteo API by coordinate.
+     * TTL: 30 minutes. Cache key is unique per coordinate.
+     *
+     * @return array{label: string, temperature: float|null, condition: string, windspeed: float|null, humidity: int|null}
+     */
+    public function getWeatherByCoordinate(float $lat, float $lng, string $label): array
+    {
+        $cacheKey = 'weather_' . str_replace(['.', '-'], '_', "{$lat}_{$lng}");
+
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($lat, $lng, $label) {
+            try {
+                $response = Http::timeout(5)->get('https://api.open-meteo.com/v1/forecast', [
+                    'latitude'           => $lat,
+                    'longitude'          => $lng,
+                    'current'            => 'temperature_2m,weathercode,windspeed_10m,relativehumidity_2m',
+                    'timezone'           => 'Asia/Jakarta',
+                    'forecast_days'      => 1,
+                ]);
+
+                if (!$response->successful()) {
+                    return $this->weatherFallback($label);
+                }
+
+                $current = $response->json('current') ?? [];
+                $code    = (int) ($current['weathercode'] ?? -1);
+
+                return [
+                    'label'       => $label,
+                    'temperature' => $current['temperature_2m'] ?? null,
+                    'condition'   => $this->mapWeatherCode($code),
+                    'windspeed'   => $current['windspeed_10m'] ?? null,
+                    'humidity'    => $current['relativehumidity_2m'] ?? null,
+                    'code'        => $code,
+                ];
+            } catch (\Throwable) {
+                return $this->weatherFallback($label);
+            }
+        });
+    }
+
+    /**
+     * Map Open-Meteo WMO weather code to Indonesian condition label.
+     */
+    private function mapWeatherCode(int $code): string
+    {
+        return match (true) {
+            $code === 0              => 'Cerah',
+            $code >= 1  && $code <= 3  => 'Berawan',
+            $code >= 45 && $code <= 48 => 'Berkabut',
+            $code >= 51 && $code <= 55 => 'Gerimis',
+            $code >= 56 && $code <= 57 => 'Gerimis Beku',
+            $code >= 61 && $code <= 65 => 'Hujan Ringan',
+            $code >= 66 && $code <= 67 => 'Hujan Lebat',
+            $code >= 71 && $code <= 77 => 'Bersalju',
+            $code >= 80 && $code <= 82 => 'Hujan Deras',
+            $code >= 85 && $code <= 86 => 'Hujan Salju',
+            $code >= 95             => 'Badai Petir',
+            default                 => 'Tidak Diketahui',
+        };
+    }
+
+    /**
+     * Return a safe fallback when weather API is unavailable.
+     */
+    private function weatherFallback(string $label): array
+    {
+        return [
+            'label'       => $label,
+            'temperature' => null,
+            'condition'   => 'Tidak Tersedia',
+            'windspeed'   => null,
+            'humidity'    => null,
+            'code'        => -1,
+        ];
     }
 }
