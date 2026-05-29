@@ -16,6 +16,11 @@ Route::get('/berita/{slug}', [Public\NewsController::class, 'show'])
 Route::get('/kategori/{slug}', [Public\NewsController::class, 'category'])->name('news.category');
 Route::get('/cari', [Public\NewsController::class, 'search'])->name('news.search');
 
+// Comments (requires auth)
+Route::post('/berita/{news}/komentar', [Public\CommentController::class, 'store'])
+    ->name('comments.store')
+    ->middleware('auth');
+
 // Video
 Route::get('/video', [Public\VideoController::class, 'index'])->name('video.index');
 Route::get('/video/{video}', [Public\VideoController::class, 'show'])->name('video.show');
@@ -79,10 +84,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,redaktur
         Route::get('/web/identitas', [Admin\WebSettingController::class, 'identitas'])->name('web.identitas');
         Route::post('/web/identitas',[Admin\WebSettingController::class, 'saveIdentitas'])->name('web.identitas.save');
 
-        // Kata Jorok (word filter)
-        Route::get('/kata-jorok', function () {
-            return view('admin.kata-jorok');
-        })->name('kata-jorok');
+        // Kata Jorok (word filter) - now dynamic
+        Route::get('/kata-jorok', [Admin\KataJorokController::class, 'index'])->name('kata-jorok');
+        Route::post('/kata-jorok', [Admin\KataJorokController::class, 'store'])->name('kata-jorok.store');
+        Route::delete('/kata-jorok/{badWord}', [Admin\KataJorokController::class, 'destroy'])->name('kata-jorok.destroy');
     });
 
     // Admin + Redaktur routes

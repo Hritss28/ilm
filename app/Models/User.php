@@ -96,10 +96,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is an author.
+     * Check if the user is a normal user.
      */
-    public function isAuthor(): bool
+    public function isUser(): bool
     {
-        return $this->role === 'author';
+        return $this->role === 'user';
     }
 }
