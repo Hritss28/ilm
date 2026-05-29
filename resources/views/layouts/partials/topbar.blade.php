@@ -11,10 +11,24 @@
         </div>
         <div class="flex items-center gap-6">
             <div class="flex items-center gap-5">
-                <a href="{{ route('login') }}" class="text-gray-400 hover:text-primary transition-all flex items-center gap-1.5 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                    <span class="text-[10px] font-black uppercase tracking-[0.1em]">Login</span>
-                </a>
+                @auth
+                    <div class="flex items-center gap-3">
+                        <span class="text-[10px] font-black uppercase tracking-[0.1em] text-gray-600">Halo, <span class="text-primary">{{ auth()->user()->name }}</span></span>
+                        <div class="h-3 w-[1px] bg-gray-200"></div>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-gray-400 hover:text-red-500 transition-all flex items-center gap-1.5 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                <span class="text-[10px] font-black uppercase tracking-[0.1em]">Logout</span>
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="text-gray-400 hover:text-primary transition-all flex items-center gap-1.5 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        <span class="text-[10px] font-black uppercase tracking-[0.1em]">Login</span>
+                    </a>
+                @endauth
                 <div class="h-3 w-[1px] bg-gray-200"></div>
                 <div class="flex items-center gap-4">
                     <a href="{{ $socialFacebook }}" target="_blank" rel="noreferrer" class="hover:text-primary transition-all hover:scale-110">

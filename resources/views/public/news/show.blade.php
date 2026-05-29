@@ -78,11 +78,101 @@
                         Twitter
                     </a>
                     <a href="https://wa.me/?text={{ urlencode($article->title . ' ' . route('news.show', $article->slug)) }}" target="_blank" rel="noopener"
-                       class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition">
+                       class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-600 transition">
                         WhatsApp
                     </a>
                 </div>
             </div>
+
+            {{-- ═══════════ COMMENT SECTION ═══════════ --}}
+            <section class="border-t border-gray-100 pt-8 mt-4" id="komentar">
+                <div class="border-l-4 border-primary pl-4 mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 uppercase tracking-tighter">
+                        Komentar
+                        <span class="text-base font-black text-primary ml-1">({{ $article->comments->count() }})</span>
+                    </h3>
+                </div>
+
+                {{-- Success Message --}}
+                @if(session('comment_success'))
+                    <div class="mb-5 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        {{ session('comment_success') }}
+                    </div>
+                @endif
+
+                {{-- Comment Form / Gate --}}
+                @auth
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-sm font-black shrink-0">
+                                {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <span class="text-sm font-bold text-gray-700">{{ auth()->user()->name }}</span>
+                        </div>
+                        <form action="{{ route('comments.store', $article) }}" method="POST">
+                            @csrf
+                            <textarea name="body" id="comment-body" rows="3"
+                                class="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl px-4 py-3 outline-none focus:ring-2 focus:border-transparent transition-all resize-none @error('body') border-red-400 @enderror"
+                                placeholder="Tulis komentar Anda di sini..."
+                                style="focus:ring-color: var(--color-primary)">{{ old('body') }}</textarea>
+                            @error('body')
+                                <p class="mt-1 text-xs font-bold text-red-600">{{ $message }}</p>
+                            @enderror
+                            <div class="flex justify-end mt-3">
+                                <button type="submit"
+                                    class="px-6 py-2 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 shadow-sm"
+                                    style="background: var(--color-primary)">
+                                    Kirim Komentar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @else
+                    <div class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-8 mb-8 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-3 text-gray-400"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <p class="text-gray-600 text-sm font-medium mb-4">Silakan login atau daftar untuk mengirim komentar.</p>
+                        <div class="flex items-center justify-center gap-3">
+                            <a href="{{ route('login') }}?redirect={{ url()->current() }}"
+                                class="px-5 py-2 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 shadow-sm"
+                                style="background: var(--color-primary)">
+                                Login
+                            </a>
+                            <a href="{{ route('register') }}"
+                                class="px-5 py-2 bg-white border border-gray-200 text-gray-700 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-gray-50 transition-all active:scale-95 shadow-sm">
+                                Daftar
+                            </a>
+                        </div>
+                    </div>
+                @endauth
+
+                {{-- Comment List --}}
+                @if($article->comments->isEmpty())
+                    <div class="text-center py-10 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-3 opacity-50"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <p class="text-sm font-medium">Belum ada komentar. Jadilah yang pertama!</p>
+                    </div>
+                @else
+                    <div class="space-y-5">
+                        @foreach($article->comments as $comment)
+                            <div class="flex gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-black shrink-0">
+                                    {{ mb_strtoupper(mb_substr($comment->user->name, 0, 1)) }}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-white border border-gray-100 rounded-2xl px-4 py-3 shadow-sm">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900">{{ $comment->user->name }}</span>
+                                            <span class="text-[10px] text-gray-400 font-medium">{{ $comment->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <p class="text-sm text-gray-700 leading-relaxed">{{ $comment->body }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </section>
 
             {{-- Related News --}}
             @if($relatedNews->isNotEmpty())

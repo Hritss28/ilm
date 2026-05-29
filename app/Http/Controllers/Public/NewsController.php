@@ -24,7 +24,7 @@ class NewsController extends Controller
         $article = News::query()
             ->published()
             ->where('slug', $slug)
-            ->with(['category', 'author'])
+            ->with(['category', 'author', 'comments.user'])
             ->firstOrFail();
 
         // Related news: same category, exclude current, limit 4
